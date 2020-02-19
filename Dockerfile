@@ -17,9 +17,10 @@ ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 
 ADD Galaxy-Workflow-Variation_in_Gene_Trees_UFB.ga $GALAXY_HOME/workflows/
-# RUN startup_lite && \
-#     galaxy-wait && \
-#     workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
+RUN startup_lite && \
+    /tool_deps/_conda/bin/galaxy-wait && \
+    /tool_deps/_conda/bin/workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD --publish_workflows
+
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
