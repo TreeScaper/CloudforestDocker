@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolbox monitor="true">
   <section id="cloudforest" name="CloudForest">
-    <tool file="treescaper/treescaper.xml"/>
+    <tool file="treescaper/treescaper-trees.xml" />
+    <tool file="treescaper/treescaper-nldr.xml" />
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />
-   </section>
+  </section>
   <section id="textutil" name="Text Manipulation">
     <tool file="filters/remove_beginning.xml" />
     <tool file="filters/randomlines.xml" />

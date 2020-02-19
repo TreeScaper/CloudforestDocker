@@ -11,15 +11,16 @@ RUN install-tools $GALAXY_ROOT/tool.yml
 COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
 ADD welcome_bootstrap.min.css $GALAXY_CONFIG_DIR/web/welcome_bootstrap.min.css
 
-RUN mkdir $GALAXY_ROOT/tools/treescaper
-ADD treescaper.xml $GALAXY_ROOT/tools/treescaper
-ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
-ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
-
 ADD Galaxy-Workflow-Variation_in_Gene_Trees_UFB.ga $GALAXY_HOME/workflows/
 RUN startup_lite && \
     /tool_deps/_conda/bin/galaxy-wait && \
     /tool_deps/_conda/bin/workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD --publish_workflows
+
+RUN mkdir $GALAXY_ROOT/tools/treescaper
+ADD treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
+ADD treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
+ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
+ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
