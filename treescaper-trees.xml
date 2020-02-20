@@ -92,27 +92,31 @@
                     <option value="ERNM" selected="true">Erdos-Rényi Null Model</option>
                     <option value="NNM">No Null Model</option>
                 </param>
-                <param argument="-lm" type="select" label="Method of plateau detection">
-                    <option value="auto" selected="true">Automatic</option>
-                    <option value="manual">Manual</option>
-                </param>
-                <section name="adv_manual" title="Manual Plateau Detection Options" expanded="false">
-                    <param argument="-lps" type="float" value="0" label="Starting"/>
-                    <param argument="-lpe" type="float" value="1" label="Ending"/>
-                    <param argument="-lpiv" type="float" value="0.1" label="Intervals">
-                        <help><![CDATA[
+                <section name="adv_manual" title="Plateau Detection Options" expanded="true">
+                    <conditional name="plateau">
+                        <param argument="-lm" type="select" label="Method of plateau detection">
+                            <option value="auto" selected="true">Automatic</option>
+                            <option value="manual">Manual</option>
+                        </param>
+                        <when value="manual">
+                            <param argument="-lps" type="float" value="0" label="Starting"/>
+                            <param argument="-lpe" type="float" value="1" label="Ending"/>
+                            <param argument="-lpiv" type="float" value="0.1" label="Intervals">
+                                <help><![CDATA[
                             Used to explore a range of possible values for λ+
                             ]]>
-                        </help>
-                    </param>
-                    <param argument="-lns" type="float" value="0" label="Starting"/>
-                    <param argument="-lne" type="float" value="1" label="Ending"/>
-                    <param argument="-lniv" type="float" value="0.1" label="Intervals">
-                        <help><![CDATA[
+                                </help>
+                            </param>
+                            <param argument="-lns" type="float" value="0" label="Starting"/>
+                            <param argument="-lne" type="float" value="1" label="Ending"/>
+                            <param argument="-lniv" type="float" value="0.1" label="Intervals">
+                                <help><![CDATA[
                             Used to explore a range of possible values for λ-
                             ]]>
-                        </help>
-                    </param>
+                                </help>
+                            </param>
+                        </when>
+                    </conditional>
                 </section>
                 <param argument="-hf" type="float" value="0" label="Frequency upper bound">
                     <help><![CDATA[
