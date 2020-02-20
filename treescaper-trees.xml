@@ -7,22 +7,30 @@
         <![CDATA[
             /galaxy-central/tools/treescaper/CLVTreeScaper 
                 -trees
-                ## file
-                #if $tree_options.f
-                    -f $tree_options.f
+                -f $input_file
+                -ft $input_file_type
+                -w $weigted_tree
+                -r $rooted_tree
+                #if $tree_output.output_type == "Dist"
+                    -dm $dm
                 #end if
-                #if $tree_options.ft
-                    -ft $tree_options.ft
+                #if $tree_output.output_type == "BipartMatrix"
+                    -bfm $bfm
                 #end if
-                #if $tree_options.o
-                    -o $tree_options.o
+                #if $tree_output.output_type == "Consensus"
+                    -if $if
+                    -ct $ct
+                    -cfm $cfm
                 #end if
-                -dm URF
+                #if $tree_output.output_type == "Affinity"
+                    -dm $dm
+                    -am $am
+                #end if
         ]]>
     </command>
     <inputs>
-        <param argument="-f" type="data" format="txt" label="Input file" />
-        <param argument="-ft" type="select" label="File type">
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="input_file_type" argument="-ft" type="select" label="File type">
             <help>
                 <![CDATA[
                 Options are:
@@ -35,8 +43,8 @@
             <option value="Dist">Dist</option>
             <option value="Cova">Cova</option>
         </param>
-        <conditional name="output">
-            <param argument="-o" type="select" label="Output Type">
+        <conditional name="tree_output">
+            <param name="output_type" argument="-o" type="select" label="Output Type">
                 <option value="Dist" selected="true">Dist</option>
                 <option value="BipartMatrix">BipartMatrix</option>
                 <option value="Consensus">Consensus</option>
@@ -99,18 +107,20 @@
                             <option value="manual">Manual</option>
                         </param>
                         <when value="manual">
-                            <param argument="-lps" type="float" value="0" label="Starting"/>
-                            <param argument="-lpe" type="float" value="1" label="Ending"/>
+                            <param argument="-lps" type="float" value="0" label="Starting" />
+                            <param argument="-lpe" type="float" value="1" label="Ending" />
                             <param argument="-lpiv" type="float" value="0.1" label="Intervals">
-                                <help><![CDATA[
+                                <help>
+                                    <![CDATA[
                             Used to explore a range of possible values for λ+
                             ]]>
                                 </help>
                             </param>
-                            <param argument="-lns" type="float" value="0" label="Starting"/>
-                            <param argument="-lne" type="float" value="1" label="Ending"/>
+                            <param argument="-lns" type="float" value="0" label="Starting" />
+                            <param argument="-lne" type="float" value="1" label="Ending" />
                             <param argument="-lniv" type="float" value="0.1" label="Intervals">
-                                <help><![CDATA[
+                                <help>
+                                    <![CDATA[
                             Used to explore a range of possible values for λ-
                             ]]>
                                 </help>
@@ -119,24 +129,26 @@
                     </conditional>
                 </section>
                 <param argument="-hf" type="float" value="0" label="Frequency upper bound">
-                    <help><![CDATA[
+                    <help>
+                        <![CDATA[
                      A number between 0 and 1.Nodes with frequencies above this value are ignored.
                     ]]>
                     </help>
                 </param>
                 <param argument="-lf" type="float" value="0" label="Frequency lower bound">
-                    <help><![CDATA[
+                    <help>
+                        <![CDATA[
                      A number between 0 and 1.Nodes with frequencies below this value are ignored.
                     ]]>
                     </help>
                 </param>
             </when>
         </conditional>
-        <param argument="-w" type="select" label="Weighted/Unweighted Tree">
+        <param name="weigted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
             <option value="0" selected="true">Unweighted</option>
             <option value="1">Weighted</option>
         </param>
-        <param argument="-r" type="select" label="Rooted/Unrooted Tree">
+        <param name="rooted_tree" argument="-r" type="select" label="Rooted/Unrooted Tree">
             <option value="0" selected="true">Unrooted</option>
             <option value="1">Rooted</option>
         </param>
