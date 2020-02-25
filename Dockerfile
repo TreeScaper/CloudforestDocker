@@ -21,6 +21,8 @@ ADD treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
 ADD treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
 ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
+ADD dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
+ADD nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]

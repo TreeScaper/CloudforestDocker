@@ -5,24 +5,23 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
+            #set $linked_name = 'input_distance.dat'
+            cp '${input_file}' '${linked_name}'&&
+            cp /galaxy-central/tools/treescaper/nldr_parameters.csv . &&
             /galaxy-central/tools/treescaper/CLVTreeScaper 
-                -trees
-                ## file
-                #if $tree_options.f
-                    -f $tree_options.f
-                #end if
-                #if $tree_options.ft
-                    -ft $tree_options.ft
-                #end if
-                #if $tree_options.o
-                    -o $tree_options.o
-                #end if
-                -dm URF
+                -nldr
+                -f $linked_name
+                -t $distance_type
+                -d $dimension
+                -c $cost_function
+                -a $nldr_algorithm
+                -i $coordinate_generate
+                -o 'txt'
         ]]>
     </command>
     <inputs>
-        <param argument="-f" type="data" format="txt" label="Input file" />
-        <param argument="-t" type="select" label="Distance type">
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="distance_type" argument="-t" type="select" label="Distance type">
             <help>
                 <![CDATA[
                 The type of distances contained in the file. Options are: 
@@ -30,24 +29,24 @@
                     'COR':low-dimensional Euclidean coordinates
                 ]]>
             </help>
-            <option value="Dis" selected="true">Dis</option>
-            <option value="Cor">Cor</option>
+            <option value="DIS" selected="true">DIS</option>
+            <option value="COR">COR</option>
         </param>
-        <param argument="-d" type="integer" value="2" label="Euclidean Dimension" />
-        <param argument="-c" type="select" label="Cost Function">
+        <param name="dimension" argument="-d" type="integer" value="2" label="Euclidean Dimension" />
+        <param name="cost_function" argument="-c" type="select" label="Cost Function">
             <option value="CLASSIC_MDS" selected="true">CLASSIC_MDS</option>
             <option value="KRUSKAL1">KRUSKAL1</option>
             <option value="NORMALIZED">NORMALIZED</option>
             <option value="SAMMON">SAMMON</option>
             <option value="CCA">CCA</option>
         </param>
-        <param argument="-a" type="select" label="NLDR Algorithm">
+        <param name="nldr_algorithm" argument="-a" type="select" label="NLDR Algorithm">
             <option value="LINEAR_ITERATION" selected="true">LINEAR_ITERATION</option>
             <option value="MAJORIZATION">MAJORIZATION</option>
             <option value="GAUSS_SEIDEL">GAUSS_SEIDEL</option>
             <option value="STOCHASTIC">STOCHASTIC</option>
         </param>
-        <param argument="-i" type="select" label="Generating Euclidean Coordinates">
+        <param name="coordinate_generate" argument="-i" type="select" label="Generating Euclidean Coordinates">
             <option value="RAND" selected="true">RAND</option>
             <option value="CLASSIC_MDS">CLASSIC_MDS</option>
             <help>
@@ -59,8 +58,9 @@
         </param>
     </inputs>
     <outputs>
-        <data name="distance" format="txt" from_work_dir="*-distance.out" label="${tool.name} on ${on_string}: Distance Matrix" />
-        <data name="bipartition" format="txt" from_work_dir="*-bipartition.out" label="${tool.name} on ${on_string}: Bipartition Matrix" />
+        <data name="report" format="txt">
+            <discover_datasets pattern="__designation__" format="txt" visible="true" />
+        </data>
     </outputs>
     <help>
         <![CDATA[
