@@ -5,10 +5,11 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
-            ln -s "${input_file}"  "${input_file.element_identifier}" &&
+            #set $linked_name = 'dummy_link.dat'
+            ln -s "${input_file}"  "${linked_name}" &&
             $__tool_directory__/CLVTreeScaper
                 -trees
-                -f '$input_file.element_identifier'
+                -f  $linked_name
                 -ft $input_file_type
                 -o $tree_output.output_type
                 -w $weigted_tree
@@ -20,7 +21,9 @@
                     -bfm $tree_output.bfm
                 #end if
                 #if $tree_output.output_type == "Consensus"
-                    -if $tree_output.if
+                    #if $tree_output.if
+                        -if $tree_output.if
+                    #end if
                     -ct $tree_output.ct
                     -cfm $tree_output.cfm
                 #end if
@@ -61,7 +64,7 @@
                 </param>
             </when>
             <when value="Consensus">
-                <param argument="-if" type="data" format="txt" label="List file" />
+                <param argument="-if" type="data" format="txt" label="List file" optional="true" />
                 <param argument="-ct" type="select" label="Consensus tree type">
                     <option value="Majority" selected="true">Majority consensus tree</option>
                     <option value="Strict">Strict consensus tree</option>
@@ -156,8 +159,15 @@
 
     </inputs>
     <outputs>
-        <data name="distance" format="txt" from_work_dir="*distance.out" label="${tool.name} on ${on_string}: Distance Matrix" />
-        <data name="bipartition" format="txt" from_work_dir="*bipartition.out" label="${tool.name} on ${on_string}: Bipartition Matrix" />
+        <data name="distance" format="txt" from_work_dir="*distance.out" label="$input_file.element_identifier : Distance Matrix">
+            <filter>tree_output["output_type"] == "Dist"</filter>
+        </data>
+        <data name="bipartition" format="txt" from_work_dir="*bipartition.out" label="$input_file.element_identifier : Bipartition Matrix">
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Consensus"</filter>
+        </data>
+        <data name="cons_tree" format="nex" from_work_dir="*consensus_tree.out" label="$input_file.element_identifier : Consensus Tree">
+            <filter>tree_output["output_type"] == "Consensus"</filter>
+        </data>
     </outputs>
     <help>
         <![CDATA[
@@ -183,7 +193,7 @@ A network has community structure if its nodes can be easily clustered into sets
     ]]>
     </help>
     <citations>
-        <citation type="doi">10.1093/molbev/msw196</citation>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
     </citations>
 
 </tool>
