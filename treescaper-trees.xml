@@ -5,11 +5,10 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
-            #set $linked_name = 'dummy_link'
-            ln -s '${input_file}' '${linked_name}' &&
-            /galaxy-central/tools/treescaper/CLVTreeScaper 
+            ln -s "${input_file}"  "${input_file.element_identifier}" &&
+            $__tool_directory__/CLVTreeScaper
                 -trees
-                -f $linked_name
+                -f '$input_file.element_identifier'
                 -ft $input_file_type
                 -o $tree_output.output_type
                 -w $weigted_tree

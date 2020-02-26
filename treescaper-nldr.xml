@@ -5,18 +5,16 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
-            #set $linked_name = 'input_distance.dat'
-            cp '${input_file}' '${linked_name}'&&
-            cp /galaxy-central/tools/treescaper/nldr_parameters.csv . &&
-            /galaxy-central/tools/treescaper/CLVTreeScaper 
+            ln -s "${input_file}"  "${input_file.element_identifier}" &&
+            cp "${__tool_directory__}/nldr_parameters.csv" nldr_parameters.csv &&
+            $__tool_directory__/CLVTreeScaper 
                 -nldr
-                -f $linked_name
+                -f '$input_file.element_identifier'
                 -t $distance_type
                 -d $dimension
                 -c $cost_function
                 -a $nldr_algorithm
                 -i $coordinate_generate
-                -o 'txt'
         ]]>
     </command>
     <inputs>
@@ -58,8 +56,8 @@
         </param>
     </inputs>
     <outputs>
-        <data name="report" format="txt">
-            <discover_datasets pattern="__designation__" format="txt" visible="true" />
+        <data name="result_output" format="txt">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.out" format="txt" visible="true" />
         </data>
     </outputs>
     <help>
