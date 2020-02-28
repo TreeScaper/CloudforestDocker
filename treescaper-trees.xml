@@ -100,8 +100,8 @@
                     <option value="Covariance">Covariance</option>
                 </param>
                 <param argument="-cm" type="select" label="Model used to compute communities">
-                    <option value="CNM" selected="true">Configuration Null Model</option>
-                    <option value="CPM">Constant Potts Model</option>
+                    <option value="CNM">Configuration Null Model</option>
+                    <option value="CPM" selected="true">Constant Potts Model</option>
                     <option value="ERNM" selected="true">Erdos-Rényi Null Model</option>
                     <option value="NNM">No Null Model</option>
                 </param>
@@ -167,6 +167,12 @@
         </data>
         <data name="cons_tree" format="nex" from_work_dir="*consensus_tree.out" label="$input_file.element_identifier : Consensus Tree">
             <filter>tree_output["output_type"] == "Consensus"</filter>
+        </data>
+        <data name="community_results" format="txt" from_work_dir="*community*results.out" label="$input_file.element_identifier : Community Results">
+            <filter>tree_output["output_type"] == "Community" and input_file_type == "Trees"</filter>
+        </data>
+        <data name="community_plateuas" format="txt" from_work_dir="*community*plateaus.out" label="$input_file.element_identifier : Community Plateaus">
+            <filter>tree_output["output_type"] == "Community" and input_file_type == "Trees"</filter>
         </data>
     </outputs>
     <help>
