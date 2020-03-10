@@ -3,6 +3,8 @@
   <section id="cloudforest" name="CloudForest">
     <tool file="treescaper/treescaper-trees.xml" />
     <tool file="treescaper/treescaper-nldr.xml" />
+    <tool file="treescaper/treescaper-dimest.xml" />
+
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />

@@ -1,0 +1,37 @@
+<tool id="treescaper-dimest" name="TreeScaper-Dimest" version="@TOOL_VERSION@">
+    <description>Phylogenomic / Users can estimate the intrinsic dimensionality of their data. This estimate can help in deciding on an appropriate number of dimensions to use when performing NLDR projections.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        #set $linked_name = 'dummy_link.dat'
+        ln -s "${input_file}"  "${linked_name}" &&
+        $__tool_directory__/CLVTreeScaper
+            -dimest
+            -f $linked_name
+            -i $distance_type
+            -e $estimator
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="distance_type" argument="-i" type="select" label="Distance type">
+            <option value="DIS" selected="true">DIS: A lower triangle matrix of original distances</option>
+            <option value="COR">COR: Low-dimensional Euclidean coordinates (if already computed).</option>
+        </param>
+        <param name="estimator" argument="-e" type="select" label="Distance estimator">
+            <option value="CORR_DIM" selected="true">CORR DIM: Correlation dimension estimator</option>
+            <option value="NN_DIM">NN DIM: Nearest neighbor estimator</option>
+            <option value="MLE_DIM">MLE DIM: Maximum likelihood estimator</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="log_log" format="txt" from_work_dir="*_logvslog.out" label="$input_file.element_identifier : Log Log"></data>
+        <data name="deri_log_log" format="txt" from_work_dir="*_deri_logvslog.out" label="$input_file.element_identifier : Derivative Log Log"></data>
+    </outputs>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+</tool>
