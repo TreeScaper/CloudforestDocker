@@ -6,6 +6,7 @@ ENV GALAXY_CONFIG_BRAND CloudForest
 
 ADD tool_conf.xml $GALAXY_ROOT/config/
 ADD tool.yml $GALAXY_ROOT/tool.yml
+ADD job_conf.xml $GALAXY_CONFIG_DIR/
 RUN install-tools $GALAXY_ROOT/tool.yml 
 
 COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
