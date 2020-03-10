@@ -6,7 +6,7 @@ ENV GALAXY_CONFIG_BRAND CloudForest
 
 ADD tool_conf.xml $GALAXY_ROOT/config/
 ADD tool.yml $GALAXY_ROOT/tool.yml
-ADD job_conf.xml $GALAXY_CONFIG_DIR/
+# ADD job_conf.xml $GALAXY_CONFIG_DIR/
 RUN install-tools $GALAXY_ROOT/tool.yml 
 
 COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
@@ -25,6 +25,9 @@ ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 ADD dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
+# Patch broken iqtree xml TODO: open a PR 
+ADD iqtree.xml /galaxy-central/database/shed_tools/toolshed.g2.bx.psu.edu/repos/iuc/iqtree/973a28be3b7f/iqtree/
+
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
