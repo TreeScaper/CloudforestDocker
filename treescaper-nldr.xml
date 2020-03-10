@@ -1,5 +1,5 @@
 <tool id="treescaper-nldr" name="TreeScaper-NLDR" version="@TOOL_VERSION@">
-    <description>Phylogenomic / users can project trees into lower dimensional space using non-linear dimensionality reduction (NLDR).</description>
+    <description>Phylogenomic / Project trees into lower dimensional space using non-linear dimensionality reduction (NLDR).</description>
     <macros>
         <import>treescaper_macros.xml</import>
     </macros>

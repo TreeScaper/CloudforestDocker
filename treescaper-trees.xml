@@ -1,5 +1,5 @@
 <tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@">
-    <description>Phylogenomic / Users can compute a majority rule/strict consensus tree, distance matrix,bipartition matrix, covariance matrix, affinity matrix, or detect communitiesin an affinity or covariance network.</description>
+    <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix,bipartition matrix, covariance matrix, affinity matrix, or detect communitiesin an affinity or covariance network.</description>
     <macros>
         <import>treescaper_macros.xml</import>
     </macros>

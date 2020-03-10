@@ -19,6 +19,7 @@ RUN startup_lite && \
 RUN mkdir $GALAXY_ROOT/tools/treescaper
 ADD treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
 ADD treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
+ADD treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
 ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 ADD dimest_parameters.csv $GALAXY_ROOT/tools/treescaper

@@ -1,5 +1,5 @@
 <tool id="treescaper-dimest" name="TreeScaper-Dimest" version="@TOOL_VERSION@">
-    <description>Phylogenomic / Users can estimate the intrinsic dimensionality of their data. This estimate can help in deciding on an appropriate number of dimensions to use when performing NLDR projections.</description>
+    <description>Phylogenomic / Estimate the intrinsic dimensionality of their data. This estimate can help in deciding on an appropriate number of dimensions to use when performing NLDR projections.</description>
     <macros>
         <import>treescaper_macros.xml</import>
     </macros>
@@ -8,6 +8,7 @@
         <![CDATA[
         #set $linked_name = 'dummy_link.dat'
         ln -s "${input_file}"  "${linked_name}" &&
+        cp "${__tool_directory__}/dimest_parameters.csv" dimest_parameters.csv &&
         $__tool_directory__/CLVTreeScaper
             -dimest
             -f $linked_name
