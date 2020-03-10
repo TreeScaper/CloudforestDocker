@@ -158,12 +158,28 @@
         </param>
 
     </inputs>
+    <!--
+        TODO: For Community argument: example_unrooted_unweighted_Affinity-Exponential-URF.out
+
+        example_unrooted_unweighted_Covariance_Matrix.out
+    -->
     <outputs>
+        <data name="covariance_matrix" format="txt" from_work_dir="*_Covariance_Matrix.out" label="$input_file.element_identifier : Covariance Matrix">
+            <filter>tree_output["output_type"] == "Covariance"</filter>
+        </data>
+        <data name="community_plateaus" format="txt" from_work_dir="*_plateaus.out" label="$input_file.element_identifier : Community Plateaus">
+            <filter>tree_output["output_type"] == "Community"</filter>
+        </data>
+        <data name="community_results" format="txt" from_work_dir="*_results.out" label="$input_file.element_identifier : Community Results">
+            <filter>tree_output["output_type"] == "Community"</filter>
+        </data>
+        <data name="affinity" format="txt" from_work_dir="*Affinity*.out" label="$input_file.element_identifier : Affinity Matrix">
+            <filter>tree_output["output_type"] == "Affinity"</filter>
+        </data>
         <data name="distance" format="txt" from_work_dir="*distance.out" label="$input_file.element_identifier : Distance Matrix">
-            <filter>tree_output["output_type"] == "Dist"</filter>
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Affinity" or tree_output["output_type"] == "Community"</filter>
         </data>
         <data name="bipartition" format="txt" from_work_dir="*bipartition.out" label="$input_file.element_identifier : Bipartition Matrix">
-            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Consensus"</filter>
         </data>
         <data name="cons_tree" format="nex" from_work_dir="*consensus_tree.out" label="$input_file.element_identifier : Consensus Tree">
             <filter>tree_output["output_type"] == "Consensus"</filter>
