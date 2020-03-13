@@ -1,40 +1,93 @@
-import { build, file_chooser } from './js/modules/dom_builder.js';
-import { make_request } from './js/modules/promises.js';
+import { GalaxyData } from './js/modules/galaxy_data.js';
+
 /**
- * dbkey: '${hda.get_metadata().dbkey}',
-            href: document.location.origin,
-            dataName: '${hda.name}',
-            historyID: '${trans.security.encode_id( hda.history_id )}',
-            datasetID: '${trans.security.encode_id( hda.id )}',
-            dom_base: 'start_div',
+ * Mediator pattern for application. 
  * @param {*} conf_obj 
  */
 
-var CloudForest = function (config) {
-    let { href, dataName, historyID, datasetID, dom_base } = config;
-    let history_contents = undefined;
+var CloudForest = (function (app) {
+    app.event_debug = true;
+    app.events = {};
 
-    let run = function () {
-        let url = href + `/api/histories/${historyID}/contents`;
-        make_request('GET', url)
-            .then(function (data) {
-                history_contents = JSON.parse(data);
-                file_chooser(history_contents);
-                build({
-                    dom_id: dom_base,
-                    href: href,
-                    history_id: historyID,
-                    dataset_id: datasetID
-                });
-            })
-            .catch(function (err) {
-                console.error('Augh, there was an error!', err.statusText);
-            })
+    /**
+     * Allows objects to subscribe to an event.
+     * @param event name
+     * @param fn call back function for event
+     * @returns {subscribe}
+     */
+    app.subscribe = function (event, fn) {
+        if (!app.events[event]) {
+            app.events[event] = [];
+        }
+        app.events[event].push({
+            context: this,
+            callback: fn
+        });
+        return this;
     };
+
+    /**
+     * Unsubscribes from the event queue
+     * @param event
+     * @param fn
+     */
+    app.unsubscribe = function (event) {
+        app.event[event].filter(function (cv) {
+            return this === cv.context;
+        }.bind(this));
+    };
+
+
+    /**
+     * Allows objects to broadcast the occurrence of an event.
+     * All subscribers to the event will have their callback functions
+     * called.
+     */
+    app.publish = function (event) {
+        var args, subscription;
+
+        if (!app.events[event]) {
+            return false;
+        }
+        args = Array.prototype.slice.call(arguments, 1);
+
+        if (app.event_debug) {
+            console.log('APP PUBLISH: ' + event + ' ARGS: ' + args);
+        }
+
+        app.events[event].map(function (cv) {
+            subscription = cv;
+            subscription.callback.apply(subscription.context, args);
+        });
+        return this;
+    };
+
+    /**
+     * Adds the subscribe and publish functions to an object
+     * @param obj
+     */
+    app.installTo = function (obj) {
+        obj.subscribe = app.subscribe;
+        obj.publish = app.publish;
+        obj.unsubscribe = app.unsubscribe;
+    };
+
+
+
+    app.init = function (confObj) {
+        confObj.subscribe = app.subscribe;
+        confObj.publish = app.publish;
+        confObj.unsubscribe = app.unsubscribe;
+        this.installTo(GalaxyData(confObj));
+        this.publish('FooFoo');
+    }
 
     return {
-        run
-    };
-}
+        run: function (confbj) {
+            app.init(confbj);
+        }
+    }
+}(CloudForest || {}));
+
 
 export { CloudForest }

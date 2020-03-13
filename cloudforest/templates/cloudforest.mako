@@ -17,6 +17,7 @@
     </div>
 
     <script src="/static/plugins/visualizations/cloudforest/static/js/libs/plotly-latest.min.js"></script>
+
     <script type="module">
             import {CloudForest} from "/static/plugins/visualizations/cloudforest/static/application.js";
             let config = {
@@ -27,8 +28,7 @@
                 datasetID: '${trans.security.encode_id( hda.id )}',
                 dom_base: 'start_div',
             };
-            let cloudforest = CloudForest(config);
-            cloudforest.run();
+            CloudForest.run(config);
     </script>
 </body>
 
