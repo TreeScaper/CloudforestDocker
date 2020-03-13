@@ -4,6 +4,7 @@ LABEL maintainer="Thomas McGowan, mcgo0092@umn.edu"
 
 ENV GALAXY_CONFIG_BRAND CloudForest
 
+
 ADD tool_conf.xml $GALAXY_ROOT/config/
 ADD tool.yml $GALAXY_ROOT/tool.yml
 # ADD job_conf.xml $GALAXY_CONFIG_DIR/
@@ -28,9 +29,14 @@ ADD nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 # Patch broken iqtree xml TODO: open a PR 
 ADD iqtree.xml /galaxy-central/database/shed_tools/toolshed.g2.bx.psu.edu/repos/iuc/iqtree/973a28be3b7f/iqtree/
 # Add for CloudForest datatype
-ADD datatypes_conf.xml $GALAXY_ROOT/config/
-ADD cloudforest.py $GALAXY_ROOT/lib/galaxy/datatypes/
+ADD ./custom_src/datatypes_conf.xml $GALAXY_ROOT/config/
+ADD ./custom_src/cloudforest.py $GALAXY_ROOT/lib/galaxy/datatypes/
 
+USER galaxy
+# Add visualization code to galaxy
+ADD ./cloudforest/ $GALAXY_ROOT/static/plugins/visualizations/cloudforest
+ADD ./cloudforest/ $GALAXY_ROOT/config/plugins/visualizations/cloudforest
+USER root
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
 
