@@ -12,22 +12,23 @@
 <body>
 
     <div class="container">
+        <h2>Hello?</h2>
         <div id="start_div"></div>
     </div>
 
     <script src="/static/plugins/visualizations/cloudforest/static/js/libs/plotly-latest.min.js"></script>
-    <script src="/static/plugins/visualizations/cloudforest/static/application.js"></script>
-    <script>
-        let config = {
-            dbkey: '${hda.get_metadata().dbkey}',
-            href: document.location.origin,
-            dataName: '${hda.name}',
-            historyID: '${trans.security.encode_id( hda.history_id )}',
-            datasetID: '${trans.security.encode_id( hda.id )}',
-            dom_base: 'start_div',
-        };
-        let cloudforest = CloudForest(config);
-        cloudforest.run();
+    <script type="module">
+            import {CloudForest} from "/static/plugins/visualizations/cloudforest/static/application.js";
+            let config = {
+                dbkey: '${hda.get_metadata().dbkey}',
+                href: document.location.origin,
+                dataName: '${hda.name}',
+                historyID: '${trans.security.encode_id( hda.history_id )}',
+                datasetID: '${trans.security.encode_id( hda.id )}',
+                dom_base: 'start_div',
+            };
+            let cloudforest = CloudForest(config);
+            cloudforest.run();
     </script>
 </body>
 

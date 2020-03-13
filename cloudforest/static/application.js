@@ -1,4 +1,4 @@
-
+import { build } from './js/modules/dom_builder.js'
 
 /**
  * dbkey: '${hda.get_metadata().dbkey}',
@@ -11,12 +11,18 @@
  */
 
 var CloudForest = function (config) {
-    let galaxy_config = config;
+    let { href, dataName, historyID, datasetID, dom_base } = config;
     let run = function () {
-        let base_elem = document.getElementById(galaxy_config.dom_base);
-        base_elem.innerHTML = 'Hello I must be going.';
+        build({
+            dom_id: dom_base,
+            href: href,
+            history_id: historyID,
+            dataset_id: datasetID
+        });
     };
     return {
         run
     };
 }
+
+export { CloudForest }
