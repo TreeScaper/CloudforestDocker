@@ -1,33 +1,29 @@
-/**
- * 
- * http://localhost:8080/api/histories/f597429621d6eb2b/contents/f2db41e1fa331b3e/display
- * 
- * 
- * @param {*} conf_obj 
- */
+import { make_request } from './promises.js';
 
-function request(method, url) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-        xhr.onload = resolve;
-        xhr.onerror = reject;
-        xhr.send();
-    });
-}
+let active_files = undefined;
 
 let build = function (conf_obj) {
     let { dom_id, href, history_id, dataset_id } = conf_obj;
     let url = href + `/api/histories/${history_id}/contents/${dataset_id}/display`;
     console.log(url);
-    request('GET', url)
+    make_request('GET', url)
         .then(function (data) {
             let e = document.getElementById(dom_id);
-            e.innerHTML = data.target.response;
+            e.innerHTML = data;
         })
-        .then(function (error) {
-            console.log(error);
-        })
+        .catch(function (error) {
+            console.log(error.statusText);
+        });
 }
 
-export { build }
+let file_chooser = function (files) {
+    active_files = files.filter(file => {
+        return file.state === 'ok' && file.purged === false;
+    });
+    active_files.forEach(f => {
+        console.log(`File ${f.name} is good.`);
+    })
+}
+
+
+export { build, file_chooser }
