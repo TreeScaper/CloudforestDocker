@@ -29,7 +29,7 @@ ADD nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD iqtree.xml /galaxy-central/database/shed_tools/toolshed.g2.bx.psu.edu/repos/iuc/iqtree/973a28be3b7f/iqtree/
 # Add for CloudForest datatype
 ADD datatypes_conf.xml $GALAXY_ROOT/config/
-ADD tabular.py $GALAXY_ROOT/lib/galaxy/datatypes/
+ADD cloudforest.py $GALAXY_ROOT/lib/galaxy/datatypes/
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
