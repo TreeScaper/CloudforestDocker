@@ -5,3 +5,4 @@ https://gist.github.com/tmcgowan/c59db9ae7059996e94738124e5d5a145
 -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container"
 
 docker run -d -p 8080:80 --name cf_galaxy -e "NONUSE=nodejs,proftp,reports" -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" cloudforest_galaxy:0.1.7
+
