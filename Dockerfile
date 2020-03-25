@@ -4,11 +4,7 @@ LABEL maintainer="Thomas McGowan, mcgo0092@umn.edu"
 
 ENV GALAXY_CONFIG_BRAND CloudForest
 
-
 ADD tool_conf.xml $GALAXY_ROOT/config/
-ADD tool.yml $GALAXY_ROOT/tool.yml
-# ADD job_conf.xml $GALAXY_CONFIG_DIR/
-RUN install-tools $GALAXY_ROOT/tool.yml 
 
 COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
 ADD welcome_bootstrap.min.css $GALAXY_CONFIG_DIR/web/welcome_bootstrap.min.css
@@ -18,24 +14,28 @@ RUN startup_lite && \
     /tool_deps/_conda/bin/galaxy-wait && \
     /tool_deps/_conda/bin/workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD --publish_workflows
 
+USER galaxy
 RUN mkdir $GALAXY_ROOT/tools/treescaper
-ADD treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
-ADD treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
-ADD treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
-ADD treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
-ADD CLVTreeScaper $GALAXY_ROOT/tools/treescaper
-ADD dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
-ADD nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
-# Patch broken iqtree xml TODO: open a PR 
-ADD iqtree.xml /galaxy-central/database/shed_tools/toolshed.g2.bx.psu.edu/repos/iuc/iqtree/973a28be3b7f/iqtree/
+ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/CLVTreeScaper $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
+
+RUN mkdir $GALAXY_ROOT/tools/iqtree
+ADD ./iqtree_tool/iqtree.xml $GALAXY_ROOT/tools/iqtree
+ADD ./iqtree_tool/iqtree_macros.xml $GALAXY_ROOT/tools/iqtree
+ADD ./iqtree_tool/iqtree $GALAXY_ROOT/tools/iqtree
 # Add for CloudForest datatype
 ADD ./custom_src/datatypes_conf.xml $GALAXY_ROOT/config/
 ADD ./custom_src/cloudforest.py $GALAXY_ROOT/lib/galaxy/datatypes/
 
-USER galaxy
 # Add visualization code to galaxy
-ADD ./cloudforest/ $GALAXY_ROOT/static/plugins/visualizations/cloudforest
-ADD ./cloudforest/ $GALAXY_ROOT/config/plugins/visualizations/cloudforest
+ADD cloudforest.tar.gz $GALAXY_ROOT/static/plugins/visualizations/
+ADD cloudforest.tar.gz $GALAXY_ROOT/config/plugins/visualizations/
+
 USER root
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]

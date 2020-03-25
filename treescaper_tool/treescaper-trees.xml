@@ -1,0 +1,220 @@
+<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@">
+    <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix,bipartition matrix, covariance matrix, affinity matrix, or detect communitiesin an affinity or covariance network.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+    <command detect_errors="exit_code">
+        <![CDATA[
+            #set $linked_name = 'dummy_link.dat'
+            ln -s "${input_file}"  "${linked_name}" &&
+            $__tool_directory__/CLVTreeScaper
+                -trees
+                -f  $linked_name
+                -ft $input_file_type
+                -o $tree_output.output_type
+                -w $weigted_tree
+                -r $rooted_tree
+                #if $tree_output.output_type == "Dist"
+                    -dm $tree_output.dm
+                #end if
+                #if $tree_output.output_type == "BipartMatrix"
+                    -bfm $tree_output.bfm
+                #end if
+                #if $tree_output.output_type == "Consensus"
+                    #if $tree_output.if
+                        -if $tree_output.if
+                    #end if
+                    -ct $tree_output.ct
+                    -cfm $tree_output.cfm
+                #end if
+                #if $tree_output.output_type == "Affinity"
+                    -dm $tree_output.dm
+                    -am $tree_output.am
+                #end if
+                 > job_log.log
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="input_file_type" argument="-ft" type="select" label="File type">
+            <help>
+                <![CDATA[
+                Options are:
+ 'Trees': the file contains trees. The tree format can be either Newick or Nexus.
+ 'Dist': the file contains distance matrix which can be used to compute affinity matrix or communities.
+ 'Cova': the file contains covariance matrix which can be used to compute communities.
+                ]]>
+            </help>
+            <option value="Trees" selected="true">Trees</option>
+            <option value="Dist">Dist</option>
+            <option value="Cova">Cova</option>
+        </param>
+        <conditional name="tree_output">
+            <param name="output_type" argument="-o" type="select" label="Output Type">
+                <option value="Dist" selected="true">Dist</option>
+                <option value="BipartMatrix">BipartMatrix</option>
+                <option value="Consensus">Consensus</option>
+                <option value="Affinity">Affinity</option>
+                <option value="Covariance">Covariance</option>
+                <option value="Community">Community</option>
+            </param>
+            <when value="BipartMatrix">
+                <param argument="-bfm" type="select" label="Bipartition matrix type">
+                    <option value="list" selected="true">Sparse matrix</option>
+                    <option value="matrix">Full matrix</option>
+                </param>
+            </when>
+            <when value="Consensus">
+                <param argument="-if" type="data" format="txt" label="List file" optional="true" />
+                <param argument="-ct" type="select" label="Consensus tree type">
+                    <option value="Majority" selected="true">Majority consensus tree</option>
+                    <option value="Strict">Strict consensus tree</option>
+                </param>
+                <param argument="-cfm" type="select" label="Consensus tree format">
+                    <option value="Newick" selected="true">Newick</option>
+                    <option value="Nexus">Nexus</option>
+                </param>
+            </when>
+            <when value="Dist">
+                <param argument="-dm" type="select" label="Distance metric">
+                    <option value="URF" selected="true">Unweighted Robinson-Foulds distance</option>
+                    <option value="RF">Weighted Robinson-Foulds distance</option>
+                    <option value="Mat">Matching distance</option>
+                    <option value="SPR">Subtree-Prune-Regraft</option>
+                </param>
+            </when>
+            <when value="Affinity">
+                <param argument="-dm" type="select" label="Distance metric">
+                    <option value="URF" selected="true">Unweighted Robinson-Foulds distance</option>
+                    <option value="RF">Weighted Robinson-Foulds distance</option>
+                    <option value="Mat">Matching distance</option>
+                    <option value="SPR">Subtree-Prune-Regraft</option>
+                </param>
+                <param argument="-am" type="select" label="Distance to affinity transformation">
+                    <option value="Rec" selected="true">Reciprocal</option>
+                    <option value="Exp">Exponential</option>
+                </param>
+            </when>
+            <when value="Community">
+                <param argument="-t" type="select" label="Target matrix">
+                    <option value="Affinity" selected="true">Affinity</option>
+                    <option value="Covariance">Covariance</option>
+                </param>
+                <param argument="-cm" type="select" label="Model used to compute communities">
+                    <option value="CNM">Configuration Null Model</option>
+                    <option value="CPM" selected="true">Constant Potts Model</option>
+                    <option value="ERNM" selected="true">Erdos-Rényi Null Model</option>
+                    <option value="NNM">No Null Model</option>
+                </param>
+                <conditional name="plateau_options">
+                    <param argument="-lm" type="select" label="Method of plateau detection">
+                        <option value="auto" selected="true">Automatic</option>
+                        <option value="manual">Manual</option>
+                    </param>
+                    <when value="auto" />
+                    <when value="manual">
+                        <param argument="-lps" type="float" value="0" label="Starting" />
+                        <param argument="-lpe" type="float" value="1" label="Ending" />
+                        <param argument="-lpiv" type="float" value="0.1" label="Intervals">
+                            <help>
+                                <![CDATA[
+                            Used to explore a range of possible values for λ+
+                            ]]>
+                            </help>
+                        </param>
+                        <param argument="-lns" type="float" value="0" label="Starting" />
+                        <param argument="-lne" type="float" value="1" label="Ending" />
+                        <param argument="-lniv" type="float" value="0.1" label="Intervals">
+                            <help>
+                                <![CDATA[
+                            Used to explore a range of possible values for λ-
+                            ]]>
+                            </help>
+                        </param>
+                    </when>
+                </conditional>
+                <param argument="-hf" type="float" value="0" label="Frequency upper bound">
+                    <help>
+                        <![CDATA[
+                     A number between 0 and 1.Nodes with frequencies above this value are ignored.
+                    ]]>
+                    </help>
+                </param>
+                <param argument="-lf" type="float" value="0" label="Frequency lower bound">
+                    <help>
+                        <![CDATA[
+                     A number between 0 and 1.Nodes with frequencies below this value are ignored.
+                    ]]>
+                    </help>
+                </param>
+            </when>
+        </conditional>
+        <param name="weigted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
+            <option value="0" selected="true">Unweighted</option>
+            <option value="1">Weighted</option>
+        </param>
+        <param name="rooted_tree" argument="-r" type="select" label="Rooted/Unrooted Tree">
+            <option value="0" selected="true">Unrooted</option>
+            <option value="1">Rooted</option>
+        </param>
+
+    </inputs>
+    <!--
+        TODO: For Community argument: example_unrooted_unweighted_Affinity-Exponential-URF.out
+
+        example_unrooted_unweighted_Covariance_Matrix.out
+    -->
+    <outputs>
+        <data name="covariance_matrix" format="cloudforest" from_work_dir="*_Covariance_Matrix.out" label="Covariance Matrix">
+            <filter>tree_output["output_type"] == "Covariance"</filter>
+        </data>
+        <data name="community_plateaus" format="cloudforest" from_work_dir="*_plateaus.out" label="Community Plateaus">
+            <filter>tree_output["output_type"] == "Community"</filter>
+        </data>
+        <data name="community_results" format="cloudforest" from_work_dir="*_results.out" label="Community Results">
+            <filter>tree_output["output_type"] == "Community"</filter>
+        </data>
+        <!--dummy_link_unrooted_unweighted_Affinity-Reciprocal-URF.out-->
+        <data name="affinity" format="cloudforest" from_work_dir="*_Affinity*.out" label="Affinity Matrix">
+            <filter>tree_output["output_type"] == "Affinity"</filter>
+        </data>
+        <data name="distance" format="cloudforest" from_work_dir="*distance.out" label="Distance Matrix">
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Affinity" or tree_output["output_type"] == "Community"</filter>
+        </data>
+        <data name="bipartition" format="cloudforest" from_work_dir="*bipartition.out" label="Bipartition Matrix">
+        </data>
+        <data name="bipartition_log" format="cloudforest" from_work_dir="job_log.log" label="BipartionLog">
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "BipartMatrix"</filter>
+        </data>
+        <data name="cons_tree" format="nex" from_work_dir="*consensus_tree.out" label="Consensus Tree">
+            <filter>tree_output["output_type"] == "Consensus"</filter>
+        </data>
+    </outputs>
+    <help>
+        <![CDATA[
+TreeScaper
+==========
+
+Quick tutorial for using TreeScaper.
+
+Overview
+--------
+
+TreeScaper allows users to accomplish many different tasks, including (i) computing pairwise distances between trees with a variety of different metrics, (ii) projecting and visualizing trees in low dimensional Euclidean space, (iii) estimating the intrinsic dimensionality of the space formed by the tree set, (iv) computing the covariance matrix of bipartition presence/absence across trees, and (v) finding communities of bipartitions or trees using state-of-the-art community detection methods. Many of these functions are not available in any other software implementation of which we are aware.
+
+Nonlinear Dimensionality Reduction
+----------------------------------
+
+NLDR seeks to find low dimensional representations of a set of high dimensional data. TreeScaper begins by computing pairwise tree distances between trees using one of several metrics, such as Robinson-Foulds (Robinson and Foulds 1981), matching (Bogdanowicz and Giaro 2012), or subtree prune and regraft (SPR) distances (following Whidden et al. 2010). NLDR then looks for low dimensional points {xi} in the Euclidean space that minimize the distortions of pairwise distances.
+
+Community Detection Methods
+---------------------------
+
+A network has community structure if its nodes can be easily clustered into sets with dense, internal connections. In phylogenetic analysis, community structure can be used to identify distinct topological signals. TreeScaper uses two distinct network types to accomplish this: networks of trees or bipartitions. 
+    ]]>
+    </help>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+
+</tool>
