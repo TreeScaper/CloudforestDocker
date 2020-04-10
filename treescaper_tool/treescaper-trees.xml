@@ -5,8 +5,18 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
-            #set $linked_name = 'dummy_link.dat'
-            ln -s "${input_file}"  "${linked_name}" &&
+            #set $linked_name = "dummy_link.dat"
+
+            #if $subsample.subsample_selector == "random_subsample" 
+                python $__tool_directory__/subsample.py $input_file $subsample.sample_size &&
+                ln -s subsampled.file  "${linked_name}" &&
+            #else if $subsample.subsample_selector == 'random_interval_subsample'
+                python $__tool_directory__/subsample.py $input_file $subsample.sample_size_interval interval &&
+                ln -s subsampled.file  "${linked_name}" &&
+            #else
+                ln -s "${input_file}"  "${linked_name}" &&
+            #end if
+
             $__tool_directory__/CLVTreeScaper
                 -trees
                 -f  $linked_name
@@ -31,7 +41,6 @@
                     -dm $tree_output.dm
                     -am $tree_output.am
                 #end if
-                 > job_log.log
         ]]>
     </command>
     <inputs>
@@ -157,6 +166,19 @@
             <option value="0" selected="true">Unrooted</option>
             <option value="1">Rooted</option>
         </param>
+        <conditional name="subsample">
+            <param name="subsample_selector" type="select" label="Subsample Tree Input">
+                <option value="no_subsample" selected="true">No subsampling</option>
+                <option value="random_subsample">Random subsampling</option>
+                <option value="random_interval_subsample">Regular interval random subsampling</option>
+            </param>
+            <when value="random_subsample">
+                <param name="sample_size" type="integer" value="1" label="Size of random sample" />
+            </when>
+            <when value="random_interval_subsample">
+                <param name="sample_size_interval" type="integer" value="1" label="Size of random sample across intervals" />
+            </when>
+        </conditional>
 
     </inputs>
     <!--
