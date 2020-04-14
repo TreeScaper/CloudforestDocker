@@ -491,7 +491,7 @@ IQ-TREE also works for codon, binary and morphogical data.
         </section>
     </inputs>
     <outputs>
-        <data name='bootttrees' format='nhx' from_work_dir="*.boottrees" label="${tool.name} on ${on_string}: Boot Trees">
+        <data name='bootttrees' format='nhx' from_work_dir="*.boottrees" label="bootstrapped.boottrees.nhx">
             <filter>str(bootstrap_parameters.nonparametric_bootstrap.b) != ''</filter>
         </data>
 
