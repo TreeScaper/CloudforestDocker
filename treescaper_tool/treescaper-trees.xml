@@ -41,6 +41,11 @@
                     -dm $tree_output.dm
                     -am $tree_output.am
                 #end if
+                #if $tree_output.output_type == "Community"
+                    -t $tree_output.t
+                    -cm $tree_output.cm
+                    -lm auto
+                #end if
                 >job_log.log 2>&1 
         ]]>
     </command>
@@ -202,7 +207,7 @@
             <filter>tree_output["output_type"] == "Affinity"</filter>
         </data>
         <data name="distance" format="cloudforest" from_work_dir="*distance.out" label="Distance Matrix">
-            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Affinity" or tree_output["output_type"] == "Community"</filter>
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Affinity"</filter>
         </data>
         <data name="bipartition" format="cloudforest" from_work_dir="*bipartition.out" label="Bipartition Matrix">
         </data>

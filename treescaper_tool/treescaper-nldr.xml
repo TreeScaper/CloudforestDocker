@@ -32,7 +32,7 @@
             <option value="DIS" selected="true">DIS</option>
             <option value="COR">COR</option>
         </param>
-        <param name="dimension" argument="-d" type="integer" value="2" label="Euclidean Dimension" />
+        <param name="dimension" argument="-d" type="integer" value="3" label="Euclidean Dimension" />
         <param name="cost_function" argument="-c" type="select" label="Cost Function">
             <option value="CLASSIC_MDS" selected="true">CLASSIC_MDS</option>
             <option value="KRUSKAL1">KRUSKAL1</option>
