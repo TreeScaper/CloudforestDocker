@@ -1,4 +1,38 @@
 
+
+The following flags are used to specify values of lambda for manual searches:
+
+-lp: Specify a fixed value of λ+.Must be between 0 and 1.Used when -lpiv is zero (see below).
+-lps, -lpe, -lpiv: Starting, ending, and sampling intervals for λ+. Used to explore a range of possible values for λ+.
+
+-ln: Specify a fixed value ofλ-. Must be between 0 and 1. Used when -lniv is zero (see below).
+-lns, -lne, -lniv: Starting, ending, and sampling intervals for λ-. Used to explore a range of possible values for λ-.
+
+Note: Either λ+ or λ- must be fixed, because plateau detection is undefined when both vary.
+
+
+
+
+
+Compute Communities with λ+ Fixed:
+./CLVTreeScaper -trees -f {trees.txt} -ft Trees -w {1,0} -r {1,0} -o Community 
+    -t {Affinity,Covariance} -cm {CNM,CPM,ERNM,NNM} 
+    -lm manu -lp {AnyNumber} -lns {AnyNumber} -lne {AnyNumber} -lniv {AnyNumber} -hf {0-1} -lf {0-1}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 https://gist.github.com/tmcgowan/c59db9ae7059996e94738124e5d5a145
 
 

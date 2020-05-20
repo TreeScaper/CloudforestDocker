@@ -44,7 +44,27 @@
                 #if $tree_output.output_type == "Community"
                     -t $tree_output.t
                     -cm $tree_output.cm
-                    -lm auto
+                    #if $tree_output.plateau_options.lm == "auto"
+                        -lm auto
+                        -hf $tree_output.hf 
+                        -lf $tree_output.lf
+                    #else
+                        #if $tree_output.plateau_options.lambda_sign
+                            -lm manual
+                            -lp $tree_output.plateau_options.fixed_lambda
+                            -lps $tree_output.plateau_options.start_lambda
+                            -lpe $tree_output.plateau_options.end_lambda
+                            -lpiv $tree_output.plateau_options.interval_lambda
+                        #else
+                            -lm manual
+                            -ln $tree_output.plateau_options.fixed_lambda
+                            -lns $tree_output.plateau_options.start_lambda
+                            -lne $tree_output.plateau_options.end_lambda
+                            -lniv $tree_output.plateau_options.interval_lambda
+                        #end if                        
+                    #end if
+                    -hf $tree_output.hf
+                    -lf $tree_output.lf
                 #end if
                 >job_log.log 2>&1 
         ]]>
@@ -121,33 +141,6 @@
                     <option value="ERNM" selected="true">Erdos-Rényi Null Model</option>
                     <option value="NNM">No Null Model</option>
                 </param>
-                <conditional name="plateau_options">
-                    <param argument="-lm" type="select" label="Method of plateau detection">
-                        <option value="auto" selected="true">Automatic</option>
-                        <option value="manual">Manual</option>
-                    </param>
-                    <when value="auto" />
-                    <when value="manual">
-                        <param argument="-lps" type="float" value="0" label="Starting" />
-                        <param argument="-lpe" type="float" value="1" label="Ending" />
-                        <param argument="-lpiv" type="float" value="0.1" label="Intervals">
-                            <help>
-                                <![CDATA[
-                            Used to explore a range of possible values for λ+
-                            ]]>
-                            </help>
-                        </param>
-                        <param argument="-lns" type="float" value="0" label="Starting" />
-                        <param argument="-lne" type="float" value="1" label="Ending" />
-                        <param argument="-lniv" type="float" value="0.1" label="Intervals">
-                            <help>
-                                <![CDATA[
-                            Used to explore a range of possible values for λ-
-                            ]]>
-                            </help>
-                        </param>
-                    </when>
-                </conditional>
                 <param argument="-hf" type="float" value="0" label="Frequency upper bound">
                     <help>
                         <![CDATA[
@@ -162,6 +155,29 @@
                     ]]>
                     </help>
                 </param>
+
+                <conditional name="plateau_options">
+                    <param argument="-lm" type="select" label="Method of plateau detection">
+                        <option value="auto" selected="true">Automatic</option>
+                        <option value="manual">Manual</option>
+                    </param>
+                    <when value="auto" />
+                    <when value="manual">
+                        <param name="lambda_sign" type="boolean" checked="true" label="λ+"/>
+                        <param name="fixed_lambda" type="float" value="0" label="Fixed λ" />
+                        <param name="start_lambda" type="float" value="0" label="Starting λ" />
+                        <param name="end_lambda" type="float" value="1" label="Ending λ" />
+                        <param name="interval_lambda" type="float" value="0.1" label="λ Interval">
+                            <help>
+                                <![CDATA[
+                            Used to explore a range of possible values for λ. Defaults to λ+, uncheck for λ-.
+                            ]]>
+                            </help>
+                        </param>
+
+                    </when>
+                </conditional>
+
             </when>
         </conditional>
         <param name="weigted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
