@@ -51,13 +51,11 @@
                     #else
                         #if $tree_output.plateau_options.lambda_sign
                             -lm manual
-                            -lp $tree_output.plateau_options.fixed_lambda
                             -lps $tree_output.plateau_options.start_lambda
                             -lpe $tree_output.plateau_options.end_lambda
                             -lpiv $tree_output.plateau_options.interval_lambda
                         #else
                             -lm manual
-                            -ln $tree_output.plateau_options.fixed_lambda
                             -lns $tree_output.plateau_options.start_lambda
                             -lne $tree_output.plateau_options.end_lambda
                             -lniv $tree_output.plateau_options.interval_lambda
@@ -164,7 +162,6 @@
                     <when value="auto" />
                     <when value="manual">
                         <param name="lambda_sign" type="boolean" checked="true" label="λ+"/>
-                        <param name="fixed_lambda" type="float" value="0" label="Fixed λ" />
                         <param name="start_lambda" type="float" value="0" label="Starting λ" />
                         <param name="end_lambda" type="float" value="1" label="Ending λ" />
                         <param name="interval_lambda" type="float" value="0.1" label="λ Interval">
