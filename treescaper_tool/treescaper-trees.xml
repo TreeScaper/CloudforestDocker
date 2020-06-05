@@ -46,23 +46,23 @@
                     -cm $tree_output.cm
                     #if $tree_output.plateau_options.lm == "auto"
                         -lm auto
-                        -hf $tree_output.hf 
-                        -lf $tree_output.lf
                     #else
                         #if $tree_output.plateau_options.lambda_sign
                             -lm manual
+                            -hf $tree_output.hf 
+                            -lf $tree_output.lf
                             -lps $tree_output.plateau_options.start_lambda
                             -lpe $tree_output.plateau_options.end_lambda
                             -lpiv $tree_output.plateau_options.interval_lambda
                         #else
                             -lm manual
+                            -hf $tree_output.hf 
+                            -lf $tree_output.lf
                             -lns $tree_output.plateau_options.start_lambda
                             -lne $tree_output.plateau_options.end_lambda
                             -lniv $tree_output.plateau_options.interval_lambda
                         #end if                        
                     #end if
-                    -hf $tree_output.hf
-                    -lf $tree_output.lf
                 #end if
                 >job_log.log 2>&1 
         ]]>
@@ -212,7 +212,7 @@
         <data name="community_plateaus" format="cloudforest" from_work_dir="*_plateaus.out" label="Community Plateaus">
             <filter>tree_output["output_type"] == "Community"</filter>
         </data>
-        <data name="community_results" format="cloudforest" from_work_dir="*_results.out" label="Community Results">
+        <data name="community_results" format="cloudforest" from_work_dir="*_results.out" label="Community Results:${input_file_type}">
             <filter>tree_output["output_type"] == "Community"</filter>
         </data>
         <!--dummy_link_unrooted_unweighted_Affinity-Reciprocal-URF.out-->
