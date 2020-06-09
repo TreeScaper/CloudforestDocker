@@ -388,7 +388,11 @@
     <datatype extension="newick" type="galaxy.datatypes.data:Newick" display_in_upload="true" />
     <datatype extension="nhx" type="galaxy.datatypes.data:Newick" subclass="true" display_in_upload="true" />
     <datatype extension="nex" type="galaxy.datatypes.data:Nexus" display_in_upload="true" />
+
     <datatype extension="cloudforest" type="galaxy.datatypes.cloudforest:CloudForest" display_in_upload="true"/>
+
+
+
     <datatype extension="iqtree" type="galaxy.datatypes.text:IQTree" />
     <datatype extension="mldist" type="galaxy.datatypes.mothur:SquareDistanceMatrix" />
     <!-- Start RGenetics Datatypes -->

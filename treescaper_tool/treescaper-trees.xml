@@ -209,7 +209,7 @@
         <data name="covariance_matrix" format="cloudforest" from_work_dir="*_Covariance_Matrix.out" label="Covariance Matrix">
             <filter>tree_output["output_type"] == "Covariance"</filter>
         </data>
-        <data name="community_plateaus" format="cloudforest" from_work_dir="*_plateaus.out" label="Community Plateaus">
+        <data name="community_plateaus" format="cloudforest" from_work_dir="*_plateaus.out" label="Community Plateaus:${input_file_type}">
             <filter>tree_output["output_type"] == "Community"</filter>
         </data>
         <data name="community_results" format="cloudforest" from_work_dir="*_results.out" label="Community Results:${input_file_type}">
@@ -223,6 +223,7 @@
             <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Affinity"</filter>
         </data>
         <data name="bipartition" format="cloudforest" from_work_dir="*bipartition.out" label="Bipartition Matrix">
+            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "BipartMatrix" or tree_output["output_type"] == "Covariance"</filter>
         </data>
         <data name="bipartition_log" format="cloudforest" from_work_dir="job_log.log" label="BipartitionLog">
             <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "BipartMatrix"</filter>
