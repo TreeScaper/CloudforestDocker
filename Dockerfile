@@ -1,4 +1,4 @@
-FROM bgruening/galaxy-stable:latest
+FROM bgruening/galaxy-stable:19.09
 
 LABEL maintainer="Thomas McGowan, mcgo0092@umn.edu"
 
