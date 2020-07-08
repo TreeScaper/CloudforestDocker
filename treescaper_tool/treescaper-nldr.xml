@@ -34,17 +34,27 @@
         </param>
         <param name="dimension" argument="-d" type="integer" value="3" label="Euclidean Dimension" />
         <param name="cost_function" argument="-c" type="select" label="Cost Function">
-            <option value="CLASSIC_MDS" selected="true">CLASSIC_MDS</option>
+            <option value="CLASSIC_MDS">CLASSIC_MDS</option>
             <option value="KRUSKAL1">KRUSKAL1</option>
             <option value="NORMALIZED">NORMALIZED</option>
             <option value="SAMMON">SAMMON</option>
-            <option value="CCA">CCA</option>
+            <option value="CCA" selected="true">CCA</option>
+            <help>
+                <![CDATA[
+                When running NLDR on trees, CLASSIC_MDS should not be used.
+                ]]>
+            </help>
         </param>
         <param name="nldr_algorithm" argument="-a" type="select" label="NLDR Algorithm">
-            <option value="LINEAR_ITERATION" selected="true">LINEAR_ITERATION</option>
+            <option value="LINEAR_ITERATION" >LINEAR_ITERATION</option>
             <option value="MAJORIZATION">MAJORIZATION</option>
             <option value="GAUSS_SEIDEL">GAUSS_SEIDEL</option>
-            <option value="STOCHASTIC">STOCHASTIC</option>
+            <option value="STOCHASTIC" selected="true">STOCHASTIC</option>
+            <help>
+                <![CDATA[
+                When using CCA as the cost function, the available algorithms are MAJORIZATION, GAUSS_SEIDEL and STOCHASTIC.
+                ]]>
+            </help>
         </param>
         <param name="coordinate_generate" argument="-i" type="select" label="Generating Euclidean Coordinates">
             <option value="RAND" selected="true">RAND</option>
