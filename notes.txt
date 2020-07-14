@@ -26,6 +26,8 @@ Compute Communities with λ+ Fixed:
 
 
 
+pandoc usage_notes.md -o test.html --to=html5 --css=notes.css --self-contained
+
 
 
 
