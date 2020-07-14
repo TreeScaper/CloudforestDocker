@@ -6,4 +6,4 @@ CloudForest is
 
 This is the code needed to build a docker container of CloudForest. The docker image is stored on docker hub.
 
-A [user guide](cloudforest_guide.html) is available.
+A [user guide](file://cloudforest_guide.html) is available.

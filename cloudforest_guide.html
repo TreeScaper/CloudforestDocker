@@ -247,18 +247,17 @@ max-width: 60em; color:black;}*:not('#mkdbuttons'){margin:0;padding:0}body{font:
 <header id="title-block-header">
 <h1 class="title">CloudForest Guide</h1>
 </header>
-<h2 id="end-users">End Users</h2>
 <p>CloudForest is a collection of phylogenomic tools residing in the workflow application <a href="https://galaxyproject.org/"><strong>Galaxy</strong></a>. Both Galaxy and CloudForest are packaged within a <a href="https://docker.com"><strong>Docker</strong></a> container.</p>
 <p>Containers package application, OS and dependency code into images that can be run from variety of computing environments. CloudForest via Docker will run on Linux, Windows and Mac OS.</p>
-<h3 id="preparing-to-run-cloudforest">Preparing to Run CloudForest</h3>
-<h4 id="docker-installation">Docker Installation</h4>
+<h2 id="preparing-to-run-cloudforest">Preparing to Run CloudForest</h2>
+<h3 id="docker-installation">Docker Installation</h3>
 <p>Of course, to run CloudForest, you will have to install Docker. Please follow these <a href="https://www.docker.com/products/docker-desktop"><strong>instructions</strong></a> to install Docker for your operating system.</p>
-<h4 id="docker-pull-and-run-commands">Docker Pull and Run Commands</h4>
+<h3 id="docker-pull-and-run-commands">Docker Pull and Run Commands</h3>
 <p>The CloudForest Docker image is stored on <a href="https://hub.docker.com/repository/docker/cloudforestphylogenomics/cloudforest_galaxy"><strong>Docker hub</strong></a>.</p>
 <blockquote>
 <p><strong>NB: Docker commands are run from the terminal command line.</strong></p>
 </blockquote>
-<h5 id="pulling-the-image">Pulling the Image</h5>
+<h4 id="pulling-the-image">Pulling the Image</h4>
 <p>You can download the image to your computer with the following <a href="https://docs.docker.com/engine/reference/commandline/pull/"><strong>command</strong></a>:</p>
 <pre><code>docker pull cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>This command contacts Docker hub and pulls down the latest image of CloudForest.</p>
@@ -266,17 +265,23 @@ max-width: 60em; color:black;}*:not('#mkdbuttons'){margin:0;padding:0}body{font:
 <pre><code>docker images</code></pre>
 <p>You will see something like this:</p>
 <pre><code>cloudforestphylogenomics/cloudforest_galaxy  latest  160a642eee15  4 days ago  2.12GB</code></pre>
-<h5 id="running-the-image">Running the Image</h5>
+<h4 id="running-a-docker-image">Running a Docker Image</h4>
 <p>In general you run any image with the following <a href="https://docs.docker.com/engine/reference/commandline/run/"><strong>command</strong></a>:</p>
 <pre><code>docker run hello-world</code></pre>
 <p>This is an actual run command that tests your Docker installation.</p>
+<h2 id="running-docker-cloudforest">Running Docker CloudForest</h2>
+<h3 id="running-with-no-data-persistence">Running with No Data Persistence</h3>
+<p>Containers are by default ephemeral applications. When you run CloudForest using the following command no data is saved once the application is stopped.</p>
+<blockquote>
+<p><strong>NB: No data is saved between invocations using the default command.</strong></p>
+</blockquote>
 <p>CloudForest is run with the docker run command with additional arguments (the command is all one line):</p>
 <pre><code>docker run -d -p 8080:80 -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=4&quot; \ 
 cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>What are the arguments?</p>
 <ul>
 <li><p>-d -p 8080:80</p>
-<p>The Galaxy workflow engine is a web application and like all web applications it listens on a port. In this case port 80. A docker container must map ports on the local machine (your computer) into the container. The argument maps the local port 8080 to the container port 80. You will use this port address when opening the application via the browser. The -d argument runs CloudForest as a daemon service.</p></li>
+<p>The Galaxy workflow engine is a web application and like all web applications it listens on a port. In this case port 80. A docker container must map ports on the local machine (your computer) into the container. The -p argument maps the local port 8080 to the container port 80. You will use the 8080 port address when opening the application via the browser. The -d argument runs CloudForest as a daemon service.</p></li>
 <li><p>-e “GALAXY_DESTINATIONS_DEFAULT=local_no_container”</p>
 <p>The -e flag sets environment variables inside the container. In this case we are telling Galaxy to run the CloudForest applications on the local machine. It is possible to run tools on <a href="https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)">HPC compute nodes or external clusters</a>. Using external clusters is outside the scope of this document.</p></li>
 <li><p>-e “GALAXY_SLOTS=4”</p>
@@ -284,13 +289,14 @@ cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <li><p>cloudforestphylogenomics/cloudforest_galaxy:latest</p>
 <p>This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have <em>not</em> pulled the image, docker will first pull the image from the docker hub and then run the container.</p></li>
 </ul>
-<h5 id="running-the-image-with-data-persistence">Running the Image with Data Persistence</h5>
+<h3 id="running-the-image-with-data-persistence">Running the Image with Data Persistence</h3>
+<p>Docker does allow for data persistence over time. This is done by mapping local filespace into the container.</p>
 <p>Coming soon to a document near you…</p>
 <pre><code>docker run -d -p 8080:80 -v /home/user/galaxy_storage/:/export/ \
 -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; \
 -e &quot;GALAXY_SLOTS=4&quot; \ 
 cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
-<h4 id="using-cloudforest">Using CloudForest</h4>
+<h2 id="using-cloudforest">Using CloudForest</h2>
 <p>It will take a minute or two for CloudForest to start once you invoke the docker run command.</p>
 <ol type="1">
 <li>Open a browser</li>

@@ -2,8 +2,6 @@ run_it.sh
 clean_it.sh
 start_it.sh
 notes.txt
-usage_notes.md
-docker_dev.md
 *.png
 *.pdf
 notes.css
