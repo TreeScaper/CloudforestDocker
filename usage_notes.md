@@ -72,7 +72,7 @@ Containers are by default ephemeral applications. When you run CloudForest using
 
 CloudForest is run with the docker run command with additional arguments (the command is all one line):
 
-    docker run -d -p 8080:80 -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" \ 
+    docker run -d -p 8080:80 --name cloudforest -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" \ 
     cloudforestphylogenomics/cloudforest_galaxy:latest
 
 What are the arguments?
@@ -81,9 +81,13 @@ What are the arguments?
 
     CloudForest is a web application and like all web applications it listens on a port. In this case port 80. A docker container must map ports on the local machine (your computer) into the container. The -p argument maps the local port 8080 to the container port 80. You will use the 8080 port address when opening the application via the browser. The -d argument runs CloudForest as a daemon service.
 
+* \--name cloudforest
+
+    The running container is given a name with this argument. Multiple containers can run at the same time on any one machine. By default each container will be given an id something like *63289272e49b*. Use the \--name argument to give the container a good, memorable name. This name will be used to stop the container.
+
 * -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container"
 
-    The -e flag sets environment variables inside the container. In this case we are telling CloudForest to run all tools on the local machine. It is possible to run tools on [HPC compute nodes or external clusters](https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)). Using external clusters is outside the scope of this document.
+    The -e flag sets environment variables inside the container. In this case we are telling CloudForest to run all tools within the container. It is possible to run tools on [HPC compute nodes or external clusters](https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)). Using external clusters is outside the scope of this document.
 
 * -e "GALAXY_SLOTS=2"
 
@@ -93,22 +97,32 @@ What are the arguments?
 
     This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have *not* pulled the image, docker will first pull the image from the docker hub and then run the container.
 
+**This is odd, why would I want to run CloudForest with no data persistence?**
+
+Running Docker in this default mode allows for an instance that does not add data to your local machine. If you are exploring data, or learning how to use the tools, and are not yet interested in building a traceable history, this mode is ideal. In addition, if there is a surprising, interesting output you can always download the data from CloudForest to your local OS.
+
 ### Running the Image with Data Persistence
 
 Docker does allow for data persistence over time. This is done by mapping local filespace into the container.
 
-    docker run -d -p 8080:80 -v /home/user/galaxy_storage/:/export/ \
+    docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ \
     -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
     -e "GALAXY_SLOTS=2" \ 
     cloudforestphylogenomics/cloudforest_galaxy:latest
 
-Docker applications are *containers* running within your host computer operating system. If you are using an iMac, the host OS is macOS and the container is linux (CloudForest is always run within linux).
+The -v option is used for volume mapping.
+
+    -v /home/user/galaxy_storage/:/export/
+
+Docker applications are *containers* running within your host computer operating system. If you are using an iMac, the host OS is macOS and the container's OS is linux (CloudForest is always run within Ubuntu).
 
 Running CloudForest with the -v option opens a tunnel from the host OS (macOS) to the container OS. In the above example the host path */home/user/galaxy_storage/* is directly connected to the container's folder */export*.
 
 When CloudForest is run with the -v option, the database and data files are stored on your local host environment within the path */home/user/galaxy_storage*.
 
-You can use any local path you would like (the left hand side of the colon), the */export/* path is mandatory. CloudForest is built to write all of its data to the container path */export/*.
+You can use any local path you would like (the left hand side of the colon), the */export/* path is **mandatory**. CloudForest is built to write all of its data to the container path */export/*.
+
+Each time you start CloudForest using the same -v option, CloudForest will use the database and data files found on the local OS path. This gives you data permanence across CloudForest starts and stops.
 
 ## Using CloudForest
 
@@ -116,14 +130,14 @@ You can use any local path you would like (the left hand side of the colon), the
 
 This is the recommended command for running CloudForest on macOS (assuming the user's name is *jdoe*):
     
-    docker run -d -p 8080:80 -v /User/jdoe/galaxy_storage/:/export/ \
+    docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ \
     -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
     -e "GALAXY_SLOTS=2" \ 
     cloudforestphylogenomics/cloudforest_galaxy:latest
 
 This is the recommended command for running CloudForest on a linux distribution (assuming the user's name is *jdoe*):
     
-    docker run -d -p 8080:80 -v /home/jdoe/galaxy_storage/:/export/ \
+    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ \
     -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
     -e "GALAXY_SLOTS=2" \ 
     cloudforestphylogenomics/cloudforest_galaxy:latest
@@ -144,11 +158,23 @@ If your computer has more than 4 cores, setting "GALAXY_SLOTS=4" is a good setti
 1. Click on "Login or Register"
 1. You can register a user name, if more than one person is going to access CloudForest. If not, use
     
-    Public name or Email Address: admin
+    **Public name or Email Address**: admin
 
-    Password: admin
+    **Password**: admin
 1. Click on Login
 
-    This is the initial workspace screen:<br>
+When you wish to stop the application, in an orderly manner, use the command:
+
+    docker stop cloudforest
+
+Where *cloudforest* is the name used in the \--name argument.
+
+### A CloudForest Tour
+
+ This is the initial workspace screen:<br>
     
-    ![](FirstScreen.png)
+![](FirstScreen.png)
+
+
+You access all tools from the left panel, click on **CloudForest** to open the subpanel:<br>
+![](ToolPanel1.png)
