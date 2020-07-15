@@ -47,7 +47,7 @@ A release for this repo is the tarball *cloudforest.tar.gz*. This release artifa
 
 The [CloudForestDocker](https://github.com/TreeScaper/CloudforestDocker.git) repo contains all the files needed to build a functional Docker image.
 
-The primary file is name [Dockerfile](https://docs.docker.com/engine/reference/builder/), which contains the docker commands needed to build a valid image.
+The primary file is named [Dockerfile](https://docs.docker.com/engine/reference/builder/), which contains the docker commands needed to build a valid image.
 
 In addition, there are multiple files and directories used in constructing the CloudForest Galaxy container
 
@@ -64,7 +64,7 @@ The CloudForestDocker repo is linked to the Docker Hub website. When there is a 
 
 ![](DockerOverview.png)
 
-The CloudForest application is a Docker container of a linux-based web application. It can run on any OS that supports Docker engine (Windows, Linux and MacOS) and it will behave the same across all OS platforms.
+The CloudForest application is a Docker container of a linux-based web application. It can run on any OS that supports Docker engine (Windows, Linux and macOS) and it will behave the same across all OS platforms.
 
 Users access CloudForest via their web browser. From the browser, data files can be uploaded to and downloaded from CloudForest. Job runs occur within the running container. That is, even when a user is accessing CloudForest from a Windows computer, CLVTreescaper will run within a linux virtual machine.
 
@@ -83,7 +83,7 @@ will not let the user save data files. If they have downloaded the files into th
 
 Docker [volumes](https://docs.docker.com/storage/volumes/) are similar to containers and are fully managed via docker commands. Data is persisted within a volume and any volume can be shared between containers. In production installations volumes are prefered. We will guide CloudForest users away from using volumes to simplify the Docker cognitive overload. But, any CloudForest user can start the CloudForest container and mount a docker volume to the running container. This is a sign of an advanced user.
 
->Volumes are portable between containers. Using volumes with CloudForest creates the ability of a user sharing an entire workflow, including results, with another user. The second user gets an exact replica of data state. Data sharing via volumes is much simpler and cleaner than passing around naked data files. This use case is something to keep in mind as we go forward on the project.
+>Volumes are portable between containers. Using volumes with CloudForest creates the ability of a user sharing an entire workflow, including results, with another user. The second user gets an exact replica of data and program state. Data sharing via volumes is much simpler and cleaner than passing around naked data files. This use case is something to keep in mind as we go forward on the project.
 
 #### Bind Mounts
 
