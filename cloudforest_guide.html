@@ -290,9 +290,8 @@ $ docker run -it ubuntu bash</code></pre>
 <blockquote>
 <p><strong>NB: No data is saved between invocations using the default command.</strong></p>
 </blockquote>
-<p>CloudForest is run with the docker run command with additional arguments (the command is all one line):</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; \ 
-cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<p>CloudForest is run with the docker run command with additional arguments:</p>
+<pre><code>docker run -d -p 8080:80 --name cloudforest -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>What are the arguments?</p>
 <ul>
 <li><p>-d -p 8080:80</p>
@@ -310,10 +309,7 @@ cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>Running Docker in this default mode allows for an instance that does not add data to your local machine. If you are exploring data, or learning how to use the tools, and are not yet interested in building a traceable history, this mode is ideal. In addition, if there is a surprising, interesting output you can always download the data from CloudForest to your local OS.</p>
 <h3 id="running-the-image-with-data-persistence">Running the Image with Data Persistence</h3>
 <p>Docker does allow for data persistence over time. This is done by mapping local filespace into the container.</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ \
--e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; \
--e &quot;GALAXY_SLOTS=2&quot; \ 
-cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>The -v option is used for volume mapping.</p>
 <pre><code>-v /home/user/galaxy_storage/:/export/</code></pre>
 <p>Docker applications are <em>containers</em> running within your host computer operating system. If you are using an iMac, the host OS is macOS and the container’s OS is linux (CloudForest is always run within Ubuntu).</p>
@@ -326,15 +322,9 @@ cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>NB: Docker commands are run from the terminal command line.</p>
 </blockquote>
 <p>This is the recommended command for running CloudForest on macOS (assuming the user’s name is <em>jdoe</em>):</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ \
--e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; \
--e &quot;GALAXY_SLOTS=2&quot; \ 
-cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>This is the recommended command for running CloudForest on a linux distribution (assuming the user’s name is <em>jdoe</em>):</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ \
--e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; \
--e &quot;GALAXY_SLOTS=2&quot; \ 
-cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <p>This is the recommended command for running CloudForest on Windows 10 (assuming the user’s name is <em>jdoe</em>):</p>
 <pre><code>TODO</code></pre>
 <p>It will take a minute or two for CloudForest to start once you invoke the docker run command.</p>
@@ -349,7 +339,7 @@ cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
 <strong>Password</strong>: admin</li>
 <li><p>Click on Login</p></li>
 </ol>
-<p>When you wish to stop the application, in an orderly manner, use the command:</p>
+<p>When you wish to stop the application use the command:</p>
 <pre><code>docker stop cloudforest</code></pre>
 <p>Where <em>cloudforest</em> is the name used in the --name argument.</p>
 <h3 id="a-cloudforest-tour">A CloudForest Tour</h3>

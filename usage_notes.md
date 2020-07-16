@@ -70,10 +70,9 @@ Containers are by default ephemeral applications. When you run CloudForest using
 
 > **NB: No data is saved between invocations using the default command.**
 
-CloudForest is run with the docker run command with additional arguments (the command is all one line):
+CloudForest is run with the docker run command with additional arguments:
 
-    docker run -d -p 8080:80 --name cloudforest -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" \ 
-    cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 What are the arguments?
 
@@ -105,10 +104,7 @@ Running Docker in this default mode allows for an instance that does not add dat
 
 Docker does allow for data persistence over time. This is done by mapping local filespace into the container.
 
-    docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ \
-    -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
-    -e "GALAXY_SLOTS=2" \ 
-    cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 The -v option is used for volume mapping.
 
@@ -130,17 +126,11 @@ Each time you start CloudForest using the same -v option, CloudForest will use t
 
 This is the recommended command for running CloudForest on macOS (assuming the user's name is *jdoe*):
     
-    docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ \
-    -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
-    -e "GALAXY_SLOTS=2" \ 
-    cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 This is the recommended command for running CloudForest on a linux distribution (assuming the user's name is *jdoe*):
     
-    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ \
-    -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" \
-    -e "GALAXY_SLOTS=2" \ 
-    cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 This is the recommended command for running CloudForest on Windows 10 (assuming the user's name is *jdoe*):
     
@@ -163,7 +153,7 @@ If your computer has more than 4 cores, setting "GALAXY_SLOTS=4" is a good setti
     **Password**: admin
 1. Click on Login
 
-When you wish to stop the application, in an orderly manner, use the command:
+When you wish to stop the application use the command:
 
     docker stop cloudforest
 

@@ -68,14 +68,14 @@ The CloudForest application is a Docker container of a linux-based web applicati
 
 Users access CloudForest via their web browser. From the browser, data files can be uploaded to and downloaded from CloudForest. Job runs occur within the running container. That is, even when a user is accessing CloudForest from a Windows computer, CLVTreescaper will run within a linux virtual machine.
 
-Since jobs are run in linux, CloudForest can be configured to use [external compute clusters](https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)). This functionality is not enabled for the current release.
+CloudForest can be configured to use [external compute clusters](https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)). This functionality is not enabled for the current release.
 
 
 ### Docker and Data Permanence
 
-Since a container is running within a non-local environment, once the Docker engine stops the container all state is lost. Running CloudForest with the following command
+Docker containers run within a non-local environment, once the Docker engine stops the container all state is lost. Running CloudForest with the following command
 
-> docker run -d -p 8080:80 --name cf_galaxy -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cf_galaxy -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 will not let the user save data files. If they have downloaded the files into their local filesystem the data is, of course, saved. Docker has two methods for persisting data from the container into the local file space: **volumes** and **bind mounts**.
 
@@ -92,11 +92,30 @@ Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/) are the origi
 Bind mounts open a filesystem channel from the container out to the host file system. When mounted, the container will write files directly to host space.
 This is the general form of the command:
 
-> docker run -d -v /local/system/path/target:/app container-name
+    docker run -d -v /local/system/path/target:/app container-name
 
 The -v argument maps the container directory */app* to the host directory */local/system/path/target*. Any file the containerized application writes to */app* is written into the host file system. When the container is stopped, the data continues to exist on the host. The mapping works in both directions. A user can add files into the host directory and the files are visible from within the running container.
 
+Starting CloudForest using bind mounts:
+
+    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+
+The LHS of the colon can be any legal, local OS path. The RHS of the colon **must** be */export/*. The base Galaxy image has been coded to use */export/* as its app root directory.
+
+As long as the LHS path is used for each application start, CloudForest will use the DB and files saved from the last run. If another LHS path is used, CloudForest will start with a blank DB and no data files.
+
+You can see why using Docker volumes is a clean method of data transfer. Bind mounts tie saved data to the local file system structure, while Docker volumes abstract away the local environment. This abstraction does come at the cost of using more Docker commands. Nullum gratuitum prandium. 
+
+### On the Nature of Data
+
+All CloudForest inputs and outputs are stored and managed within the Galaxy application. The Galaxy database tracks data files by maintaining the file system path to the data file. Galaxy standardizes file names to the basic form */path/to/all/files/000/265/dataset_265905.dat* where the number monotonically increases. The human readable name, *alces_alces.boottree* is stored as well within the schema.
+
+User access to data files must be through the UI since the names and types of files are obscured if viewed directly via the file system.
+
+> The data files are not stored as BLOBS in the database. Links and relationships are maintained by Galaxy, the raw data is maintained by the file system.
 
 ## Beta Testing
 
-> http://msi-cloudfrst-tst-web.oit.umn.edu:8080/
+For beta testing we have a web installation created at:
+
+    http://msi-cloudfrst-tst-web.oit.umn.edu:8080/
