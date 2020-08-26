@@ -19,13 +19,14 @@
     <inputs>
         <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
         <param name="distance_type" argument="-i" type="select" label="Distance type">
-            <option value="DIS" selected="true">DIS: A lower triangle matrix of original distances</option>
-            <option value="COR">COR: Low-dimensional Euclidean coordinates (if already computed).</option>
+            <option value="DIS">DIS: A lower triangle matrix of original distances</option>
+            <option value="COR" selected="true">COR: Low-dimensional Euclidean coordinates (if already computed).</option>
         </param>
         <param name="estimator" argument="-e" type="select" label="Distance estimator">
             <option value="CORR_DIM" selected="true">CORR DIM: Correlation dimension estimator</option>
             <option value="NN_DIM">NN DIM: Nearest neighbor estimator</option>
             <option value="MLE_DIM">MLE DIM: Maximum likelihood estimator</option>
+            <option value="EIG_DIM">EIG DIM: EIG estimator</option>
         </param>
     </inputs>
     <outputs>

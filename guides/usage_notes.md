@@ -165,6 +165,12 @@ Where *cloudforest* is the name used in the \--name argument.
     
 ![](FirstScreen.png)
 
+<p align="center">&#9672;</p>
 
 You access all tools from the left panel, click on **CloudForest** to open the subpanel:<br>
 ![](ToolPanel1.png)
+
+<p align="center">&#9672;</p>
+
+There are contstructed workflows available for use. These workflows string together mutliple tools with common options selected. This example workflow starts with a sequence file, produces a set of bootstrapped trees using IQTree and then finishes with a set of TreeScaper outputs.
+![](wrk_flow_1.png)

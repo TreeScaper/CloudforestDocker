@@ -3,6 +3,7 @@
     <macros>
         <import>treescaper_macros.xml</import>
     </macros>
+    <!-- ./CLVTreeScaper -nldr -trees -f working_dir/Distance_test.out -t DIS -d 3 -c CCA -a STOCHASTIC -i RAND -post NLDR_3D-->
     <command detect_errors="exit_code">
         <![CDATA[
             #set $linked_name = 'dummy_link.dat'
@@ -16,6 +17,7 @@
                 -c $cost_function
                 -a $nldr_algorithm
                 -i $coordinate_generate
+                -post "NLDR_${dimension}D"
                 >>run_log.log 2>&1
         ]]>
     </command>
@@ -50,6 +52,7 @@
             <option value="MAJORIZATION">MAJORIZATION</option>
             <option value="GAUSS_SEIDEL">GAUSS_SEIDEL</option>
             <option value="STOCHASTIC" selected="true">STOCHASTIC</option>
+            <option value="METROPOLIS">METROPOLIS</option>
             <help>
                 <![CDATA[
                 When using CCA as the cost function, the available algorithms are MAJORIZATION, GAUSS_SEIDEL and STOCHASTIC.
@@ -69,13 +72,8 @@
     </inputs>
     <outputs>
         <data name="runlog" format="cloudforest" from_work_dir="run_log.log" label="NLDR_log" />
-        <data name="nldr_coordinates" format="cloudforest" from_work_dir="*D*COR*.out" label="NLDR_Dim_${dimension}_Coordinates"/>
-        <data name="nldr_trust" format="cloudforest" from_work_dir="*D*TRU*.out" label="NLDR_Dim_${dimension}_Trustworthiness"/>
-
-        <!-- <data name="result_output" format="cloudforest">
-            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.out" format="cloudforest" visible="true" />
-        </data> -->
-
+        <data name="nldr_coordinates" format="cloudforest" from_work_dir="Coordinates_NLDR_*.out" label="NLDR_Dim_${dimension}_Coordinates"/>
+        <data name="nldr_distance" format="cloudforest" from_work_dir="Distance_NLDR_3D.out" label="NLDR_Dim_${dimension}_Distance"/>
     </outputs>
     <help>
         <![CDATA[
