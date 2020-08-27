@@ -18,7 +18,7 @@ USER galaxy
 RUN mkdir $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
-ADD ./treescaper_tool/treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-affinity.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/tools/treescaper

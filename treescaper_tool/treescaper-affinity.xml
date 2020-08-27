@@ -1,0 +1,30 @@
+<tool id="treescaper-affinity" name="TreeScaper-Affinity" version="@TOOL_VERSION@">
+    <description>Phylogenomic / Generate an affinity matrix.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        #set $linked_name = 'dummy_link.dat'
+        ln -s "${input_file}" "${linked_name}" &&
+        $__tool_directory__/CLVTreeScaper
+            -aff
+            -f $linked_name
+            -am $affinity_type
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="affinity_type" argument="-am" type="select" label="Affinity type">
+            <option value="Rec">Rec</option>
+            <option value="Exp" selected="true">Exp</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="affinity_matrix" format="txt" from_work_dir="Affinity*.out" label="Affinity Matrix"></data>
+    </outputs>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+</tool>
