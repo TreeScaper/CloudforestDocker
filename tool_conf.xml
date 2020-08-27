@@ -3,6 +3,7 @@
   <section id="cloudforest" name="CloudForest">
     <tool file="treescaper/treescaper-trees.xml" />
     <tool file="treescaper/treescaper-nldr.xml" />
+    <tool file="treescaper/treescaper-community.xml" />
     <tool file="treescaper/treescaper-affinity.xml" />
     <tool file="iqtree/iqtree.xml" />
   </section>

@@ -1,0 +1,75 @@
+<tool id="treescaper-community" name="TreeScaper-CommunityDetection" version="@TOOL_VERSION@">
+    <description>Phylogenomic / Discover communities amongst the trees.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+    <command detect_errors="exit_code">
+        <![CDATA[
+            #set $linked_name = "dummy_link.dat"
+            ln -s "${input_file}"  "${linked_name}" &&
+            
+            $__tool_directory__/CLVTreeScaper
+                -comm
+                -f  $linked_name
+                -cm $cd_model
+                -lm auto
+                -hf $freq_ul
+                -lf $freq_ll
+                -post cd_detect
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="cd_model" argument="-cm" type="select" label="Model used to compute communities">
+            <option value="CNM" selected="true">Configuration Null Model</option>
+            <option value="CPM">Constant Potts Model</option>
+            <option value="ERNM">Erdos-Rényi Null Model</option>
+            <option value="NNM">No Null Model</option>
+        </param>
+        <param name="freq_ul" argument="-hf" type="float" value="0" label="Frequency upper bound">
+            <help>
+                <![CDATA[
+             A number between 0 and 1.Nodes with frequencies above this value are ignored.
+            ]]>
+            </help>
+        </param>
+        <param name="freq_ll" argument="-lf" type="float" value="0" label="Frequency lower bound">
+            <help>
+                <![CDATA[
+             A number between 0 and 1.Nodes with frequencies below this value are ignored.
+            ]]>
+            </help>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="cd_plateaus" format="cloudforest" from_work_dir="CD_Plateaus_cd_detect.out" label="Plateaus of CD result" />
+        <data name="cd_corr" format="cloudforest" from_work_dir="Community_COR_cd_detect.out" label="CD with NLDR Coordinates" />
+        <data name="community_results" format="cloudforest" from_work_dir="Community_cd_detect.out" label="CD Results" />
+    </outputs>
+    <help>
+        <![CDATA[
+TreeScaper
+==========
+
+Quick tutorial for using TreeScaper.
+
+Overview
+--------
+
+TreeScaper allows users to accomplish many different tasks, including (i) computing pairwise distances between trees with a variety of different metrics, (ii) projecting and visualizing trees in low dimensional Euclidean space, (iii) estimating the intrinsic dimensionality of the space formed by the tree set, (iv) computing the covariance matrix of bipartition presence/absence across trees, and (v) finding communities of bipartitions or trees using state-of-the-art community detection methods. Many of these functions are not available in any other software implementation of which we are aware.
+
+Nonlinear Dimensionality Reduction
+----------------------------------
+
+NLDR seeks to find low dimensional representations of a set of high dimensional data. TreeScaper begins by computing pairwise tree distances between trees using one of several metrics, such as Robinson-Foulds (Robinson and Foulds 1981), matching (Bogdanowicz and Giaro 2012), or subtree prune and regraft (SPR) distances (following Whidden et al. 2010). NLDR then looks for low dimensional points {xi} in the Euclidean space that minimize the distortions of pairwise distances.
+
+Community Detection Methods
+---------------------------
+
+A network has community structure if its nodes can be easily clustered into sets with dense, internal connections. In phylogenetic analysis, community structure can be used to identify distinct topological signals. TreeScaper uses two distinct network types to accomplish this: networks of trees or bipartitions. 
+    ]]>
+    </help>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+</tool>
