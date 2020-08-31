@@ -92,19 +92,19 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="taxa_ids" format="cloudforest" from_work_dir="Taxon*" label="${tree_output.output_type} Taxa IDs">
+        <data name="taxa_ids" format="cloudforest" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">
             <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Cova"</filter>
         </data>
-        <data name="bipartition_count" format="cloudforest" from_work_dir="Bipartition_Count_*.out" label="${tree_output.output_type} Bipartition Counts">
+        <data name="bipartition_count" format="cloudforest" from_work_dir="Bipartition_Count_*.out" label="Bipartition Counts from ${on_string}">
             <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Cova"</filter>
         </data>
-        <data name="covariance_matrix" format="cloudforest" from_work_dir="*Covariance_cova.out" label="Bipartition Covariance Matrix">
+        <data name="covariance_matrix" format="cloudforest" from_work_dir="*Covariance_cova.out" label="Covariance Matrix from ${on_string}">
             <filter>tree_output["output_type"] == "Cova"</filter>
         </data>
-        <data name="distance" format="cloudforest" from_work_dir="Distance_dist.out" label="Bipartition Distance Matrix">
+        <data name="distance" format="cloudforest" from_work_dir="Distance_dist.out" label="Distance Matrix from ${on_string}">
             <filter>tree_output["output_type"] == "Dist"</filter>
         </data>
-        <data name="cons_tree" format="nex" from_work_dir="Consensus_consensus.out" label="Consensus Tree">
+        <data name="cons_tree" format="nex" from_work_dir="Consensus_consensus.out" label="Consensus Tree from ${on_string}">
             <filter>tree_output["output_type"] == "Consensus"</filter>
         </data>
     </outputs>
