@@ -69,8 +69,8 @@
         </param>
     </inputs>
     <outputs>
-        <data name="nldr_coordinates" format="cloudforest" from_work_dir="Coordinates_NLDR.out" label="NLDR Coordinates: ${dimension}D"/>
-        <data name="nldr_distance" format="cloudforest" from_work_dir="Distance_NLDR.out" label="NLDR Distance Matrix: ${dimension}D"/>
+        <data name="nldr_coordinates" format="cloudforest" from_work_dir="Coordinates_NLDR.out" label="NLDR Coordinates: ${dimension}D from ${on_string}"/>
+        <data name="nldr_distance" format="cloudforest" from_work_dir="Distance_NLDR.out" label="NLDR Distance Matrix: ${dimension}D from ${on_string}"/>
     </outputs>
     <help>
         <![CDATA[

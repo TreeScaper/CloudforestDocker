@@ -42,9 +42,9 @@
         </param>
     </inputs>
     <outputs>
-        <data name="cd_plateaus" format="cloudforest" from_work_dir="CD_Plateaus_cd_detect.out" label="Plateaus of CD result" />
-        <data name="cd_corr" format="cloudforest" from_work_dir="Community_COR_cd_detect.out" label="CD with NLDR Coordinates" />
-        <data name="community_results" format="cloudforest" from_work_dir="Community_cd_detect.out" label="CD Results" />
+        <data name="cd_plateaus" format="cloudforest" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
+        <data name="cd_corr" format="cloudforest" from_work_dir="Community_COR_cd_detect.out" label="CD w/ NLDR from ${on_string}" />
+        <data name="community_results" format="cloudforest" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
     </outputs>
     <help>
         <![CDATA[
