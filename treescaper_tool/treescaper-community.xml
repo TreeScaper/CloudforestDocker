@@ -26,14 +26,14 @@
             <option value="ERNM">Erdos-Rényi Null Model</option>
             <option value="NNM">No Null Model</option>
         </param>
-        <param name="freq_ul" argument="-hf" type="float" value="0" label="Frequency upper bound">
+        <param name="freq_ul" argument="-hf" type="float" value="0.9" label="Frequency upper bound">
             <help>
                 <![CDATA[
              A number between 0 and 1.Nodes with frequencies above this value are ignored.
             ]]>
             </help>
         </param>
-        <param name="freq_ll" argument="-lf" type="float" value="0" label="Frequency lower bound">
+        <param name="freq_ll" argument="-lf" type="float" value="0.1" label="Frequency lower bound">
             <help>
                 <![CDATA[
              A number between 0 and 1.Nodes with frequencies below this value are ignored.
