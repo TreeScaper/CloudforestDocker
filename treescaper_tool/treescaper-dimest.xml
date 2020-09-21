@@ -1,0 +1,42 @@
+<tool id="treescaper-dimest" name="TreeScaper-Dimest" version="@TOOL_VERSION@">
+    <description>Phylogenomic / Generate a dimension estimate.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+
+    <command detect_errors="exit_code">
+        <![CDATA[
+        #set $linked_name = 'dummy_link.dat'
+        cp "${__tool_directory__}/dimest_parameters.csv" dimest_parameters.csv &&
+        python $__tool_directory__/clean_header.py ${input_file} 'cleaned.out' &&
+        ln -s cleaned.out "${linked_name}" &&
+        $__tool_directory__/CLVTreeScaper
+            -dimest
+            -f $linked_name
+            -e $dimest_algo
+            -i $data_type &&
+        mv 'dummy_link_${dimest_algo}_logvslog.out' 'logvslog.out' &&
+        mv 'dummy_link_${dimest_algo}_deri_logvslog.out' 'deri_logvslog.out'
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="dimest_algo" argument="-e" type="select" label="Algorithm">
+            <option value="CORR_DIM" selected="true">CORR_DIM</option>
+            <option value="NN_DIM">NN_DIM</option>
+            <option value="EIG_DIM">EIG_DIM</option>
+            <option value="MLE_DIM">MLE_DIM</option>
+        </param>
+        <param name="data_type" argument="-i" type="select" label="Input Data Type">
+            <option value="COR" selected="true">Coordinate Matrix</option>
+            <option value="DIS">Distance Matrix</option>
+        </param>    
+    </inputs>
+    <outputs>
+        <data format="cloudforest" name="LogVsLog" from_work_dir="logvslog.out" label="LogVLog ${on_string}"></data>
+        <data format="cloudforest" name="DerivLogVsLog" from_work_dir="deri_logvslog.out" label="DerivLogVLog ${on_string}"></data>
+    </outputs>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+</tool>

@@ -21,11 +21,14 @@ ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-affinity.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/CLVTreeScaper $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/clean_header.py $GALAXY_ROOT/tools/treescaper
+
 
 RUN mkdir $GALAXY_ROOT/tools/iqtree
 ADD ./iqtree_tool/iqtree.xml $GALAXY_ROOT/tools/iqtree

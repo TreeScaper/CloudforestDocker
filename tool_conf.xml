@@ -5,6 +5,7 @@
     <tool file="treescaper/treescaper-nldr.xml" />
     <tool file="treescaper/treescaper-community.xml" />
     <tool file="treescaper/treescaper-affinity.xml" />
+    <tool file="treescaper/treescaper-dimest.xml"/>  
     <tool file="iqtree/iqtree.xml" />
   </section>
   <section id="getext" name="Get Data">
