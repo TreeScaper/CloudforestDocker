@@ -1,6 +1,4 @@
----
-title: CloudForest Development
----
+# CloudForest #
 
 CloudForest is comprised of three separate code units:
 
@@ -27,7 +25,7 @@ The code units are brought together to build and publish a Docker container on [
 ### TreeScaper
 
 The [TreeScaper](https://github.com/TreeScaper/TreeScaper) repo contains C++ code for producing CLVTreeScaper.
-Currently, the **docker** branch uses github actions to automatically [compile and generate](https://github.com/TreeScaper/TreeScaper/blob/docker/.github/workflows/docker_compile.yml) the CLVTreeScaper executable as an artifact. Compilation begins on any push to the branch. The status of continuous integration can be seen ![CLI_Docker CI](https://github.com/TreeScaper/TreeScaper/workflows/CLI_Docker%20CI/badge.svg?branch=docker) on the repo's [README](https://github.com/TreeScaper/TreeScaper/tree/docker) page.
+Currently, the **docker** branch uses github actions to automatically [compile and generate](https://github.com/TreeScaper/TreeScaper/blob/docker/.github/workflows/docker_compile.yml) the CLVTreeScaper executable as an artifact. Compilation begins on any push to the branch. The status of continuous integration can be seen on the repo's [README](https://github.com/TreeScaper/TreeScaper/tree/docker) page.
 
 TreeScaper is compiled with a Makefile using g++ as the compiler. The CI action uses Ubuntu-18.04 as the compile environment.
 
@@ -118,4 +116,6 @@ User access to data files must be through the UI since the names and types of fi
 
 For beta testing we have a web installation created at:
 
-    http://msi-cloudfrst-tst-web.oit.umn.edu:8080/
+    http://cloudforest.umn.edu
+
+The port, 8080, generally used in docker containers is not being used in the beta installation. Instead we are using port 80 since there is only one application running on the virtual server. Port 80 is the defaualt port for HTML, and so does not need to be references in the address.

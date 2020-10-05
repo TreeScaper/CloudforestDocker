@@ -1,7 +1,4 @@
----
-title: CloudForest Guide
-
----
+# CloudForest #
 
 CloudForest is a collection of phylogenomic tools residing in the workflow application [**Galaxy**](https://galaxyproject.org/). Both Galaxy and CloudForest are packaged within a [**Docker**](https://docker.com) container.
 
@@ -34,6 +31,8 @@ You can verify the download with the command:
 You will see something like this:
 
     cloudforestphylogenomics/cloudforest_galaxy  latest  160a642eee15  4 days ago  2.12GB
+
+The number "160a642eee15" is an arbitraty ID assigned to the container by Docker. You do not have to use the ID number.  
 
 #### Running a Docker Image
 
@@ -110,9 +109,9 @@ The -v option is used for volume mapping.
 
     -v /home/user/galaxy_storage/:/export/
 
-Docker applications are *containers* running within your host computer operating system. If you are using an iMac, the host OS is macOS and the container's OS is linux (CloudForest is always run within Ubuntu).
+Docker applications are *containers* running within your host computer operating system. If you are using a Mac, the host OS is macOS and the container's OS is linux (CloudForest is always run within Ubuntu).
 
-Running CloudForest with the -v option opens a tunnel from the host OS (macOS) to the container OS. In the above example the host path */home/user/galaxy_storage/* is directly connected to the container's folder */export*.
+Running CloudForest with the -v option opens a tunnel from the host OS (macOS in the example) to the container OS. In the above example the host path */home/user/galaxy_storage/* is directly connected to the container's folder */export*.
 
 When CloudForest is run with the -v option, the database and data files are stored on your local host environment within the path */home/user/galaxy_storage*.
 
@@ -153,24 +152,52 @@ If your computer has more than 4 cores, setting "GALAXY_SLOTS=4" is a good setti
     **Password**: admin
 1. Click on Login
 
-When you wish to stop the application use the command:
+When you wish to stop the application use the folowing command at the terminal:
 
     docker stop cloudforest
 
 Where *cloudforest* is the name used in the \--name argument.
 
-### A CloudForest Tour
+### A Brief CloudForest Tour
 
  This is the initial workspace screen:<br>
     
 ![](FirstScreen.png)
 
+The right panel shows your processing history. Each entry in the history is a file: either imported from your local file space or the results of a computation.
+
+The center panel will contain all the options for a selected tool. You will launch the tool by clicking **Execute** after specifying options.
+
+The left panel contains all the tools available for use.
+
 <p align="center">&#9672;</p>
 
 You access all tools from the left panel, click on **CloudForest** to open the subpanel:<br>
-![](ToolPanel1.png)
+![](Tools.png)
+
+Click on any tool to show its options:<br>
+![](TreeScaper-Trees.png)
+
+In this example, the options for the **-trees** argument are made available. The first history entry, **cats_subsampled.boottrees** has been uploaded to CloudForest and is the start of the data analysis.
+
+Clicking on **Execute** starts the compute job. In the right history pane, you can see the four outputs that will be produced from the job run. Once the entries change from gray to green, the job is complete and the outputs are ready for further processing or inspection.
+
+For instance, you can run NLDR on history entry 5 **Distance Matrix from data 1** to generate a non-linear dimension reduction of the generated trees. 
+
+![](Execute.png)
 
 <p align="center">&#9672;</p>
 
-There are contstructed workflows available for use. These workflows string together mutliple tools with common options selected. This example workflow starts with a sequence file, produces a set of bootstrapped trees using IQTree and then finishes with a set of TreeScaper outputs.
-![](wrk_flow_1.png)
+#### Workflows ####
+
+There are constructed workflows available for use. These workflows string together mutliple tools with common options selected. Reading from left to right:
+- Start with a set of bootstrapped trees, you will select the specific input
+- Generate a distance matrix
+- Generate a 20D NLDR matrix from the distance matrix
+- Generate an affinity matrix from the 20D matrix
+- Run community detection based on the generated affinity matrix
+
+Once the workflow starts, barring errors, it will run until the final output is produced. All intermediate datasets will be saved and will be available for inspection or as inputs to other compute jobs.
+![](Workflow_20D.png)
+
+<p align="center">&#9672;</p>
