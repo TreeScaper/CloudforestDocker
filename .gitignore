@@ -2,7 +2,6 @@ run_it.sh
 clean_it.sh
 start_it.sh
 notes.txt
-*.png
 *.pdf
 notes.css
 my_notes.txt
