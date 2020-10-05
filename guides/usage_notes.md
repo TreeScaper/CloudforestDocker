@@ -233,7 +233,7 @@ CloudForest datasets can be visualized directly from the CloudForest application
 
 Then click on the *CloudForest Visualizations* link in the center pane. This will open the CloudForest visualization application.
 
-![]()
+![](viz_categories.png)
 
 The available plots and visualizations are arranged in three categories:
 - NLDR Plots
@@ -248,7 +248,7 @@ The available plots and visualizations are arranged in three categories:
 - Communtiy Detection
     - CD Results
 
-![](viz_categories.png)
+
 
 Click on any dropdown item to visualize the file. For example, choosing *NDLR Coordinates: 3D from data 5* will produce a fully interactive 3D plot
 
