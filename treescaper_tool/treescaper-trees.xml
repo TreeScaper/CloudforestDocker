@@ -41,7 +41,7 @@
         ]]>
     </command>
     <inputs>
-        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="input_file" argument="-f" type="data" format="cloudforest.trees" label="Input file" />
         
         <conditional name="tree_output">
             <param name="output_type" argument="-o" type="select" label="Output Type">

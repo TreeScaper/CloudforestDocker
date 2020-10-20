@@ -390,7 +390,7 @@
     <datatype extension="nex" type="galaxy.datatypes.data:Nexus" display_in_upload="true" />
 
     <datatype extension="cloudforest" type="galaxy.datatypes.cloudforest:CloudForest" display_in_upload="true"/>
-
+    <datatype extension="cloudforest.trees" type="galaxy.datatypes.cloudforest:CloudForestTrees" subclass="true" display_in_upload="true"/>
 
 
     <datatype extension="iqtree" type="galaxy.datatypes.text:IQTree" />
@@ -765,6 +765,7 @@
     defined format first, followed by next-most rigidly defined,
     and so on.
     -->
+    <sniffer type="galaxy.datatypes.cloudforest:CloudForestTrees" />
     <sniffer type="galaxy.datatypes.plant_tribes:PlantTribesKsComponents" />
     <sniffer type="galaxy.datatypes.plant_tribes:Smat" />
     <sniffer type="galaxy.datatypes.mothur:Sabund" />

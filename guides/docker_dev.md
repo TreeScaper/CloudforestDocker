@@ -1,4 +1,4 @@
-# CloudForest #
+# CloudForest Developer Guide #
 
 CloudForest is comprised of three separate code units:
 
@@ -119,3 +119,9 @@ For beta testing we have a web installation created at:
     http://cloudforest.umn.edu
 
 The port, 8080, generally used in docker containers is not being used in the beta installation. Instead we are using port 80 since there is only one application running on the virtual server. Port 80 is the defaualt port for HTML, and so does not need to be references in the address.
+
+## JS Visualization Code #
+
+The visualization code resides in this git [**repo.**](https://github.com/TreeScaper/CloudforestVisualization) The Webpack build can be started from the npm script *build* or more completely from the script *package*. The *package* script uses Webpack to generate a bundled JS app. Then a bash script is run to generate a Galaxy compliant tarball for use in the docker image.
+
+Each plot is coded in its own ES6 module. With general page behavior set in in separate modules. No module has access to any other module. All communication is done through the web API Event interface. Code modules listen for, via *eventListner*, or send out events, via *dispatchEvents*, in response to a user's actions.
