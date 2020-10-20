@@ -19,7 +19,7 @@
         ]]>
     </command>
     <inputs>
-        <param name="input_file" argument="-f" type="data" format="txt" label="Input file" />
+        <param name="input_file" argument="-f" type="data" format="cloudforest.affinity" label="Input file" />
         <param name="cd_model" argument="-cm" type="select" label="Model used to compute communities">
             <option value="CNM" selected="true">Configuration Null Model</option>
             <option value="CPM">Constant Potts Model</option>
@@ -42,9 +42,9 @@
         </param>
     </inputs>
     <outputs>
-        <data name="cd_plateaus" format="cloudforest" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
-        <data name="cd_corr" format="cloudforest" from_work_dir="Community_COR_cd_detect.out" label="CD w/ NLDR from ${on_string}" />
-        <data name="community_results" format="cloudforest" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
+        <data name="cd_plateaus" format="cloudforest.cd" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
+        <data name="cd_corr" format="cloudforest.cd" from_work_dir="Community_COR_cd_detect.out" label="CD w/ NLDR from ${on_string}" />
+        <data name="community_results" format="cloudforest.cd" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
     </outputs>
     <help>
         <![CDATA[

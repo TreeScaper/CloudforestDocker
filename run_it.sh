@@ -10,6 +10,7 @@ VERSION=$1
 
 docker stop cf_galaxy && docker rm cf_galaxy &&
 docker rmi cloudforestphylogenomics/cloudforest_galaxy:$VERSION &&
+docker volume prune -f &&
 rm cloudforest.tar.gz &&
 cp ../CloudforestVisualization/cloudforest.tar.gz . &&
 docker build -t cloudforestphylogenomics/cloudforest_galaxy:$VERSION . &&
