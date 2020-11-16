@@ -27,7 +27,7 @@
                     -lp $parameter_tuning.lambda_fix_pos
                     -lns $parameter_tuning.lambda_neg_start
                     -lne $parameter_tuning.lambda_neg_end
-                    -lniv $parameter_tuning.lambda_neg_ic
+                    -lniv $parameter_tuning.lambda_neg_iv
                 #end if
                 -hf $freq_ul
                 -lf $freq_ll
