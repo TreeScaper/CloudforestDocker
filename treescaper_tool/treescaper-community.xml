@@ -35,22 +35,7 @@
         ]]>
     </command>
     <inputs>        
-        <conditional name="input_type">
-            <param name="input_type_selector" type="select" label="Choose Input Type">
-                <option value="dist" selected="true">Distance Matrix</option>
-                <option value="cov">Covariance Matrix</option>
-                <option value="aff">Affinity Matrix</option>
-            </param>
-            <when value="dist">
-                <param name="input_file" argument="-f" type="data" format="cloudforest.distance" label="Input file" />
-            </when>
-            <when value="cov">
-                <param name="input_file" argument="-f" type="data" format="cloudforest.covariance" label="Input file" />
-            </when>
-            <when value="aff">
-                <param name="input_file" argument="-f" type="data" format="cloudforest.affinity" label="Input file" />
-            </when>
-        </conditional>
+        <param name="input_file" argument="-f" type="data" format="cloudforest.affinity" label="Input file" />
         <param name="cd_model" argument="-cm" type="select" label="Model used to compute communities">
             <option value="CNM" selected="true">Configuration Null Model</option>
             <option value="CPM">Constant Potts Model</option>
@@ -119,7 +104,6 @@
     </inputs>
     <outputs>
         <data name="cd_plateaus" format="cloudforest.cd" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
-        <data name="cd_corr" format="cloudforest.cd" from_work_dir="Community_COR_cd_detect.out" label="CD with NLDR Coordinates from ${on_string}" />
         <data name="community_results" format="cloudforest.cd" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
     </outputs>
     <help>
