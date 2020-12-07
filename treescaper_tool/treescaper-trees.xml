@@ -7,11 +7,11 @@
         <![CDATA[
             #set $linked_name = "dummy_link.dat"
 
-            #if $subsample.subsample_selector == "random_subsample" 
-                python $__tool_directory__/subsample.py $input_file $subsample.sample_size &&
+            #if $subsample_selector == "random_subsample" 
+                python $__tool_directory__/subsample.py $input_file $sample_size &&
                 ln -s subsampled.file  "${linked_name}" &&
-            #else if $subsample.subsample_selector == 'random_interval_subsample'
-                python $__tool_directory__/subsample.py $input_file $subsample.sample_size_interval interval &&
+            #else if $subsample_selector == 'random_interval_subsample'
+                python $__tool_directory__/subsample.py $input_file $sample_size interval &&
                 ln -s subsampled.file  "${linked_name}" &&
             #else
                 ln -s "${input_file}"  "${linked_name}" &&
@@ -77,19 +77,20 @@
             <option value="0" selected="true">Unrooted</option>
             <option value="1">Rooted</option>
         </param>
-        <conditional name="subsample">
-            <param name="subsample_selector" type="select" label="Subsample Tree Input">
-                <option value="no_subsample" selected="true">No subsampling</option>
-                <option value="random_subsample">Random subsampling</option>
-                <option value="random_interval_subsample">Regular interval random subsampling</option>
-            </param>
-            <when value="random_subsample">
-                <param name="sample_size" type="integer" value="1" label="Size of random sample" />
-            </when>
-            <when value="random_interval_subsample">
-                <param name="sample_size_interval" type="integer" value="1" label="Size of random sample across intervals" />
-            </when>
-        </conditional>
+        <param name="subsample_selector" type="select" label="Subsample Tree Input">
+            <option value="no_subsample" selected="true">No subsampling</option>
+            <option value="random_subsample">Random subsampling</option>
+            <option value="random_interval_subsample">Regular interval random subsampling</option>
+            <help>
+                <![CDATA[
+                You can subsample the input tree set in two ways: randomly selecting a new sample from the 
+                original treeset, or randomly selecting a new sample across regular intervals of the original tree set.
+                This guarantees coverage across the set from tree 1 to tree n. 
+                ]]>
+            </help>
+        </param>
+        <param name="sample_size" type="integer" value="1" label="Size" />
+        
     </inputs>
     <outputs>
         <data name="taxa_ids" format="cloudforest.text" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">

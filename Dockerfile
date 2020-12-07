@@ -9,8 +9,7 @@ ADD tool_conf.xml $GALAXY_ROOT/config/
 COPY welcome.html $GALAXY_CONFIG_DIR/web/welcome.html
 ADD welcome_bootstrap.min.css $GALAXY_CONFIG_DIR/web/welcome_bootstrap.min.css
 
-ADD Galaxy-Workflow-Variation_in_Gene_Trees_UFB.ga $GALAXY_HOME/workflows/
-ADD Galaxy-Workflow-Basic_TreeScaper_Workflow_w__20D_NLDR.ga $GALAXY_HOME/workflows/
+ADD Galaxy-Workflow-Example_CloudForest_Workflow.ga $GALAXY_HOME/workflows/
 RUN startup_lite && \
     /tool_deps/_conda/bin/galaxy-wait && \
     /tool_deps/_conda/bin/workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD --publish_workflows
