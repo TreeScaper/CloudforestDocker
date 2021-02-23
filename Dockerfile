@@ -1,6 +1,6 @@
 FROM bgruening/galaxy-stable:19.09
 
-LABEL maintainer="Thomas McGowan, mcgo0092@umn.edu"
+LABEL maintainer="Reid Wagner, wagnerr@umn.edu"
 
 ENV GALAXY_CONFIG_BRAND CloudForest
 
