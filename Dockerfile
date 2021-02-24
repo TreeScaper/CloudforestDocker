@@ -28,6 +28,8 @@ ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/clean_header.py $GALAXY_ROOT/tools/treescaper
 
+RUN mkdir $GALAXY_ROOT/tools/cloudforest_cat
+ADD ./cloudforest_cat_tool/cloudforest_cat.xml $GALAXY_ROOT/tools/cloudforest_cat
 
 RUN mkdir $GALAXY_ROOT/tools/iqtree
 ADD ./iqtree_tool/iqtree.xml $GALAXY_ROOT/tools/iqtree

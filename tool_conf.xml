@@ -8,6 +8,9 @@
     <tool file="treescaper/treescaper-dimest.xml"/>  
     <tool file="iqtree/iqtree.xml" />
   </section>
+  <section id="cloudforestutil" name="CloudForest Utilities">
+    <tool file="cloudforest_cat/cloudforest_cat.xml" />
+  </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />
   </section>

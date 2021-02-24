@@ -1,0 +1,19 @@
+<tool id="cloudforest_cat" name="Concatenate" version="0.1.0">
+  <description>CloudForest utility to concatenate datasets in a collection into a single dataset using cat(1).</description>
+  <command>
+    <![CDATA[
+      cat
+        #for $input in $input_collection:
+          $input
+        #end for
+      > '${output}'
+    ]]>
+  </command>
+  <inputs>
+    <param name="input_collection" type="data_collection" label="Source collection"/>
+  </inputs>
+  <outputs>
+    <data name="output" format_source="input_collection" label="Output dataset"/>
+  </outputs>
+  <help>This tool concatenates datasets in a collection using cat(1).</help>
+</tool>
