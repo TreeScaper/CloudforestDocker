@@ -67,6 +67,20 @@ Read about the [**prune**](https://docs.docker.com/engine/reference/commandline/
 
 ## Running Docker CloudForest
 
+### `run.sh`
+
+A simple script `run.sh` is provided to run the project. To get started with a local instance *without* data perstitance, run:
+
+	./run.sh dev cloudforest_dev
+
+This builds an image named `cloudforestphylogenomics/cloudforest_galaxy:dev`, and runs it in a local container named `cloudforest_dev`. You may be prompted to confirm that
+the script may delete existing images or containers with the same name. To override this prompt, the `-d` flag may be used.
+
+To run an instance with data persistence, first we need to create a volume, and pass it with `-v` as an argument to `run.sh`:
+
+	docker volume create cloudforest-volume
+	./run.sh -v cloudforest-volume dev cloudforest_dev
+
 ### Running with No Data Persistence
 
 Containers are by default ephemeral applications. When you run CloudForest using the following command no data is saved once the application is stopped.

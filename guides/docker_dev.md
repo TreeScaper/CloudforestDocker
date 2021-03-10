@@ -79,13 +79,18 @@ will not let the user save data files. If they have downloaded the files into th
 
 #### Volumes
 
-Docker [volumes](https://docs.docker.com/storage/volumes/) are similar to containers and are fully managed via docker commands. Data is persisted within a volume and any volume can be shared between containers. In production installations volumes are prefered. We will guide CloudForest users away from using volumes to simplify the Docker cognitive overload. But, any CloudForest user can start the CloudForest container and mount a docker volume to the running container. This is a sign of an advanced user.
+Docker [volumes](https://docs.docker.com/storage/volumes/) are similar to containers and are fully managed via docker commands. Data is persisted within a volume and any volume can be shared between containers. For CloudForest, volumes are now preferred to bind mounts.
 
 >Volumes are portable between containers. Using volumes with CloudForest creates the ability of a user sharing an entire workflow, including results, with another user. The second user gets an exact replica of data and program state. Data sharing via volumes is much simpler and cleaner than passing around naked data files. This use case is something to keep in mind as we go forward on the project.
 
+Data persistence with volumes can be achieved by 1) creating the volume, and 2) running the Galaxy container with volume mapped in:
+
+	docker volume create cloudforest-volume
+	docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+
 #### Bind Mounts
 
-Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/) are the original method for persisting data out of a running container. This is the method we will use in our user instructions. 
+Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/) are the original method for persisting data out of a running container. This method is not preferred, but instructions are listed below for interested users.
 
 Bind mounts open a filesystem channel from the container out to the host file system. When mounted, the container will write files directly to host space.
 This is the general form of the command:
@@ -93,6 +98,8 @@ This is the general form of the command:
     docker run -d -v /local/system/path/target:/app container-name
 
 The -v argument maps the container directory */app* to the host directory */local/system/path/target*. Any file the containerized application writes to */app* is written into the host file system. When the container is stopped, the data continues to exist on the host. The mapping works in both directions. A user can add files into the host directory and the files are visible from within the running container.
+
+**Note**: On MacOS the host directory used for the bind mount may need allowed in Docker Desktop. This can be done by navigating to `Preferences -> Resources -> File Sharing` and adding the directory the list found there.
 
 Starting CloudForest using bind mounts:
 
