@@ -201,6 +201,31 @@ $ docker run -it ubuntu bash</code></pre>
 <p>To run an instance with data persistence, first we need to create a volume, and pass it with <code>-v</code> as an argument to <code>run.sh</code>:</p>
 <pre><code>docker volume create cloudforest-volume
 ./run.sh -v cloudforest-volume dev cloudforest_dev</code></pre>
+<p>The <code>-s</code> option can be used to enable SFTP for file-upload, which currently should only be used in a local, single-user context. See the <code>Uploading Files</code> section below.</p>
+<h3 id="uploading-files">Uploading Files</h3>
+<p>Galaxy documentation <a href="https://galaxyproject.org/tutorials/upload/">recommends</a> only using the basic local file upload for small numbers of files. For many files, or larger files FTP is recommended. Due to some limitations with running an FTP server within Docker, SFTP is a more viable method for uploading files in bulk.</p>
+<h4 id="sftp-warning-this-option-comes-with-security-considerations---see-below.">SFTP (Warning: this option comes with security considerations - see below.)</h4>
+<p>This should not be used on an host that allows incoming network traffic, over has multiple users. In the current implementation of galaxy-docker from which CloudForest is built, the entire containerized Galaxy installation including uploaded data may be downloaded via SFTP by anyone with an account on the instance. For this reason it is only suitably run on a personal machine, for the time being.</p>
+<p>The <code>-s</code> flag for <code>run.sh</code> may be used to enable SFTP on the instance. The SFTP port is forwarded to 8022 only on IP 127.0.0.1, just in case it is run on a publicly accessible host.</p>
+<p><a href="https://filezilla-project.org/">FileZilla</a> or <a href="https://man7.org/linux/man-pages/man1/sftp.1.html">sftp</a> may be used to upload files to the instance.</p>
+<h4 id="filezilla-steps">FileZilla Steps</h4>
+<ol type="1">
+<li>Download the FileZilla client from https://filezilla-project.org.</li>
+<li>With FileZilla open, click the Site Manager button in the top left corner.</li>
+<li>Click <strong>New site</strong> to create a new site and name it however you like, e.g. “CloudForest”.</li>
+<li>Select <strong>Protocol</strong> -&gt; <strong>SFTP - SSH File Transfer Protocol</strong>.</li>
+<li>Enter <strong>127.0.0.1</strong> for <strong>Host</strong>.</li>
+<li>Enter <strong>8022</strong> for <strong>Port</strong>.</li>
+<li>Select <strong>Ask for password</strong> for <strong>Logon Type</strong>.</li>
+<li>Enter your galaxy username.</li>
+<li>Select <strong>OK</strong> and FileZilla will prompt for your password and establish a connection.</li>
+</ol>
+<p>You should see on the right a hierarchy of directories <code>/export/ftp/&lt;your username&gt;</code>. Navigate to the files on your host machine in the left-hand pane, and drag the files you want to upload to the right-hand pane.</p>
+<p>Once the files have been uploaded to the FTP location, they must still be imported into your history. This is done within Galaxy by navigating in the tool pane to <code>Get Data</code> -&gt; <code>Upload File</code> -&gt; <code>Choose FTP file</code>. Here you should see the files you uploaded with FileZilla.</p>
+<h4 id="sftp">sftp</h4>
+<p><code>sftp</code> is a command-line program for uploading/downloading that is likely already installed if your machine is running MacOS or Linux. File upload can be achieved with the following command:</p>
+<pre><code>sftp -P 8022 -o User=&lt;your username&gt; 127.0.0.1 &lt;&lt;&lt; $&#39;put &lt;path to your files&gt;&#39;</code></pre>
+<p>File globbing may be used here for the filepath, e.g. <code>/my/text/files/*.txt</code> will upload all <code>.txt</code> files in that directory.</p>
 <h3 id="running-with-no-data-persistence">Running with No Data Persistence</h3>
 <p>Containers are by default ephemeral applications. When you run CloudForest using the following command no data is saved once the application is stopped.</p>
 <blockquote>

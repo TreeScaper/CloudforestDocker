@@ -9,7 +9,7 @@
 
 if [[ $# -lt 2 ]]; then
     echo "Error: tag and container name must be provided.."
-    echo "Usage: ./run_it.sh [-v volume_name] [-d] <tag> <container_name>"
+    echo "Usage: ./run_it.sh [-v volume_name] [-d] [-s] <tag> <container_name>"
     echo
     echo "The arguments <tag> and <container_name> arguments set the tag and name for"
     echo "the image and container that are created, respectively. Set them however you choose."
@@ -19,11 +19,24 @@ if [[ $# -lt 2 ]]; then
     echo
     echo "-d can be used to ignore the prompt warning the user that existing containers and images"
     echo "with the same name will be deleted."
+    echo
+    echo "-s can be used to enable SFTP on 127.0.0.1:8022. Warning: the current implementation of "
+    echo "SFTP allows any users to access all SFTP files, so it should only be used in local,"
+    echo "single-user contexts."
     exit 1
 fi
 
+# Services that should not be included in the image
+NONUSE="nodejs,reports,proftp"
+
+PORT_FORWARDING="-p 8080:80"
+
 # If true, don't warn user before deleting image and/or container
 DELETE=false
+
+# Don't allow sftp by default because its implementation in galaxy-docker is insecure.
+# Should only be used for local instances
+ALLOW_SFTP=false
 
 # Optional arguments before the required tag and container name
 while [[ $# -gt 2 ]]; do
@@ -35,6 +48,10 @@ while [[ $# -gt 2 ]]; do
 	    ;;
 	"-d")
 	    DELETE=true
+	    shift
+	    ;;
+	"-s")
+	    ALLOW_SFTP=true
 	    shift
 	    ;;
 	*)
@@ -51,6 +68,11 @@ CONTAINER_NAME=$1
 shift
 
 IMAGE_NAME="cloudforestphylogenomics/cloudforest_galaxy:$TAG"
+
+if [[ $ALLOW_SFTP == "true" ]]; then
+    PORT_FORWARDING="$PORT_FORWARDING -p 127.0.0.1:8022:22"
+    NONUSE=$(sed 's/,proftp//' <<< $NONUSE)
+fi
 
 # Check if container already exists
 container_exists=false
@@ -91,8 +113,7 @@ if [[ $image_exists == true ]]; then
     docker rmi "$IMAGE_NAME"
 fi
 
-echo VOLUME_ARGUMENT $VOLUME_ARGUMENT
 # Build new image, run container, and track logs
 docker build -t "$IMAGE_NAME" . &&
-docker run -d -p 8080:80 $VOLUME_ARGUMENT --name "$CONTAINER_NAME" -e "NONUSE=nodejs,proftp,reports" -e "GALAXY_CONFIG_CLEANUP_JOB=onsuccess" -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" "$IMAGE_NAME" &&
+docker run -d $PORT_FORWARDING $VOLUME_ARGUMENT --name "$CONTAINER_NAME" -e "NONUSE=$NONUSE" -e "GALAXY_CONFIG_CLEANUP_JOB=onsuccess" -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" "$IMAGE_NAME" &&
 docker logs -f "$CONTAINER_NAME"
