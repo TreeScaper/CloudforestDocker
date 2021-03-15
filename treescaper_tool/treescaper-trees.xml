@@ -23,8 +23,11 @@
                 -o $tree_output.output_type
                 -w $weigted_tree
                 -r $rooted_tree
+                -s $seed
+                -c $scalar
                 #if $tree_output.output_type == "Dist"
                     -dm $tree_output.dm
+                    -dfm $tree_output.dfm
                     -post dist
                 #end if
                 #if $tree_output.output_type == "Cova"
@@ -38,6 +41,9 @@
                     -cfm $tree_output.cfm
                     -post consensus
                 #end if
+                #if $tree_output.output_type == "Bipartition"
+                    -post bipartition
+                #end if
         ]]>
     </command>
     <inputs>
@@ -48,6 +54,7 @@
                 <option value="Dist" selected="true">Dist</option>
                 <option value="Consensus">Consensus</option>
                 <option value="Cova">Covariance</option>
+                <option value="Bipartition">Bipartition only</option>
             </param>
             <when value="Consensus">
                 <param argument="-if" type="data" format="txt" label="List file" optional="true" />
@@ -66,6 +73,16 @@
                     <option value="RF">Weighted Robinson-Foulds distance</option>
                     <option value="Mat">Matching distance</option>
                     <option value="SPR">Subtree-Prune-Regraft</option>
+                </param>
+                <param argument="-dfm" type="select" label="Distance matrix format">
+                    <option value="matrix" selected="true">Matrix</option>
+                    <option value="list">List</option>
+                    <help>
+                        <![CDATA[
+                            Format of output symmetric matrix. "Matrix" outputs a matrix in dense lower triangular form,
+                            whereas "List" outputs a list of indices and entries.
+                        ]]>
+                    </help>
                 </param>
             </when>
         </conditional>
@@ -90,17 +107,25 @@
             </help>
         </param>
         <param name="sample_size" type="integer" value="1" label="Size" />
+        <param name="seed" argument="-s" type="integer" value="1" label="Random seed for hash function."/>
+        <param name="scalar" argument="-c" type="integer" value="1000" label="Scalar of prime number p > cnl that is used as the range of the unique label of bitstring hv2."/>
         
     </inputs>
     <outputs>
         <data name="taxa_ids" format="cloudforest.text" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">
-            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Cova"</filter>
+            <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
         </data>
-        <data name="bipartition_count" format="cloudforest.text" from_work_dir="Bipartition_Count_dist.out" label="Bipartition Counts from ${on_string}">
-            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Cova"</filter>
+        <data name="bipartition_count" format="cloudforest.text" from_work_dir="Bipartition_Count" label="Bipartition Counts from ${on_string}">
+            <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
         </data>
-        <data name="bipartition_matrix" format="cloudforest.bipartition" from_work_dir="Bipartition_dist.out" label="Bipartition Matrix from ${on_string}">
-            <filter>tree_output["output_type"] == "Dist" or tree_output["output_type"] == "Cova"</filter>
+        <data name="bipartition_matrix_dist" format="cloudforest.bipartition" from_work_dir="Bipartition_dist.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Dist"</filter>
+        </data>
+        <data name="bipartition_matrix_cova" format="cloudforest.bipartition" from_work_dir="Bipartition_cova.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Cova"</filter>
+        </data>
+        <data name="bipartition_matrix_bipartition" format="cloudforest.bipartition" from_work_dir="Bipartition_bipartition.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Bipartition"</filter>
         </data>
         <data name="covariance_matrix" format="cloudforest.covariance" from_work_dir="*Covariance_cova.out" label="Covariance Matrix from ${on_string}">
             <filter>tree_output["output_type"] == "Cova"</filter>
