@@ -67,9 +67,9 @@ Read about the [**prune**](https://docs.docker.com/engine/reference/commandline/
 
 ## Running Docker CloudForest
 
-### `run.sh`
+### Building and Running from Source: `run.sh`
 
-A simple script `run.sh` is provided to run the project. To get started with a local instance *without* data perstitance, run:
+A simple script `run.sh` is provided to build and run the project locally. To get started with a local instance *without* data persistence, run:
 
 	./run.sh dev cloudforest_dev
 
@@ -119,6 +119,7 @@ Once the files have been uploaded to the FTP location, they must still be import
 
 File globbing may be used here for the filepath, e.g. `/my/text/files/*.txt` will upload all `.txt` files in that directory.
 
+
 ### Running with No Data Persistence
 
 Containers are by default ephemeral applications. When you run CloudForest using the following command no data is saved once the application is stopped.
@@ -157,37 +158,33 @@ Running Docker in this default mode allows for an instance that does not add dat
 
 ### Running the Image with Data Persistence
 
-Docker does allow for data persistence over time. This is done by mapping local filespace into the container.
+Docker does allow for data persistence over time. This is done by mapping a docker volume into the container.
 
-    docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
-The *__-v__* option is used for volume mapping.
+The *__--mount__* option is used for volume mapping.
 
-    -v /home/user/galaxy_storage/:/export/
+    --mount source=cloudforest-volume,target=/export/
 
-Docker applications are containers running within your host computer operating system. If you are using a Mac, the host OS is macOS and the container's OS is linux (CloudForest is always run within Ubuntu).
+Volumes can be created like so:
 
-Running CloudForest with the *__-v__* option opens a tunnel from the host OS (macOS in the example) into the container OS. In the above example the host path */home/user/galaxy_storage/* is directly connected to the container's folder */export*.
+	docker volume create cloudforest-volume
 
-When CloudForest is run with the *__-v__* option, the database and data files are stored on your local host environment within the path */home/user/galaxy_storage*.
+Docker applications are containers running within your host computer operating system. If you are using a Mac, the host OS is MacOS and the container's OS is Linux (CloudForest is always run within Ubuntu).
 
-You can use any local path you would like (the left hand side of the colon), the *__/export/__* path is **mandatory**. CloudForest is built to write all of its data to the container path *__/export/__*.
+Running CloudForest in this way mounts the Docker volume to the *__/export__* path within connected to the container's filesystem. This is where the Galaxy database, data, and configuration files are stored.
 
-Each time you start CloudForest using the same *__-v__* option, CloudForest will use the database and data files found on the local OS path. This gives you data permanence across CloudForest starts and stops.
+Each time you start CloudForest using the same *__--mount__* option, CloudForest will use the database, data, and configuration files found on the volume. This gives you data permanence across CloudForest starts and stops.
 
-You can specifiy multiple, unique *__-v__* options. In that case you will have completely separate CloudForest data installations existing in your local file space.
+You can create and use multiple Docker volumes for completely separate CloudForest data installations.
 
 ## Using CloudForest
 
 > NB: Docker commands are run from the terminal command line.
 
-This is the recommended command for running CloudForest on macOS (assuming the user's name is *jdoe*):
+This is the recommended command for running CloudForest on MacOS and Linux platforms:
     
-    docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
-
-This is the recommended command for running CloudForest on a linux distribution (assuming the user's name is *jdoe*):
-    
-    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
 
 This is the recommended command for running CloudForest on Windows 10 (assuming the user's name is *jdoe*):
     
