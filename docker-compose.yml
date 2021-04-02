@@ -1,0 +1,15 @@
+services:
+  cloudforest:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ${CLOUDFOREST_VOLUME}:/export
+    environment:
+      NONUSE: "nodejs,reports,proftp"
+      GALAXY_CONFIG_CLEANUP: onsuccess
+      GALAXY_DIESTINATIONS_DEFAULT: local_no_container
+      GALAXY_SLOTS: 4
+
+volumes:
+  default-cloudforest-volume:
