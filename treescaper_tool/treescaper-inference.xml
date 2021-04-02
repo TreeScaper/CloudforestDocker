@@ -1,0 +1,97 @@
+<tool id="treescaper-inference" name="TreeScaper-Inference" version="@TREESCAPER2_VERSION@+galaxy0">
+    <description>
+        <![CDATA[
+            (Warning: The current version of this wrapper does not fail if the underlying CLVTreeScaper2 program fails. This is done so that the job status file can be retrieved and output,
+            as well as any finished results. The job may not have run to completion, even if it appeared successful. Check the job_status file to verify all jobs run to completion.)
+
+            Phylogenomic / Generate bootstrap trees via the CIPRES REST API.
+            ]]>
+    </description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+    </macros>
+    <command detect_errors="exit_code">
+        <![CDATA[
+            #set $file_list = "file_list.txt"
+            #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
+            #set $output_suffix = "RAxML_bootstrap.result"
+            #else if $tool.id == 'IQTREE_XSEDE':
+            #set $output_suffix = "output.boottrees"
+            #end if
+
+            #for $input in $input_collection:
+            echo $input >> $file_list &&
+            #end for
+
+            cat $cra_params > params.txt &&
+
+            $__tool_directory__/CLVTreeScaper2
+            -inference
+            -f $file_list
+            -p $cra_params;
+            find cra_output -name '*${output_suffix}' -exec cat {} + > composite_boottrees.nex
+            ]]>
+    </command>
+    <configfiles>
+        <configfile name="cra_params"><![CDATA[#slurp
+# CRA Parameters
+metadata.statusEmail=true
+
+#if $tool.id == 'RAXMLHPC8_REST_XSEDE':
+tool=$tool.id
+vparam.choose_bootstrap_=$tool.choose_bootstrap_
+vparam.printbrlength_=$tool.printbrlength_
+
+# Parameters used by TreeScaper
+treescaper.output=RAxML_bootstrap.result
+
+#else if $tool.id == 'IQTREE_XSEDE':
+tool=$tool.id
+vparam.write_boottrees_=1
+vparam.specify_runtype_=2
+vparam.bootstrap_type_=$tool.bootstrap_type_
+vparam.num_bootreps_=$tool.num_bootreps_
+vparam.write_boottrees1_=$tool.write_boottrees1_
+vparam.specify_numparts_=$tool.specify_numparts_
+
+# Parameters used by TreeScaper
+treescaper.output=output.boottrees
+#end if]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="input_collection" type="data_collection" label="Collection of PHYLIP files."/>
+        <conditional name="tool">
+            <param name="id" type="select" label="Tool" help="Select inference to use via CIPRES REST API.">
+                <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
+                <option value="IQTREE_XSEDE">IQ-TREE</option>
+            </param>
+            <when value="RAXMLHPC8_REST_XSEDE">
+                <param name="choose_bootstrap_" type="select" label="Bootstrap type">
+                    <option value="b" selected="true">Non-parametric</option>
+                    <option value="x">Rapid</option>
+                </param>
+                <param name="printbrlength_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
+                <param name="bootstrap_value_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
+            </when>
+            <when value="IQTREE_XSEDE">
+                <param name="bootstrap_type_" type="select" label="Bootstrap type">
+                    <option value="b" selected="true">Non-parametric</option>
+                    <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
+                    <option value="bb">Ultrafast</option>
+                </param>
+                <param name="num_bootreps_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
+                <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
+                <param name="specify_numparts_" label="Number of partitions in dataset" value="1" type="integer" optional="true"/>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="composite_boottrees.nex" format="cloudforest.trees" from_work_dir="composite_boottrees.nex" label="Bootstrap Trees (all results from input collection)."/>
+        <data name="job_status" format="txt" from_work_dir="cra_output/job_status" label="Job status"/>
+        <data name="params" format="txt" from_work_dir="params.txt" label="Params"/>
+        <!--
+        <collection name="output" format="nex" type="list" label="${on_string}" >
+        </collection>
+        -->
+    </outputs>
+</tool>

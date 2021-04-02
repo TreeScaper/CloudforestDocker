@@ -17,12 +17,14 @@ RUN startup_lite && \
 USER galaxy
 RUN mkdir $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-inference.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-affinity.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-dimest.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper_macros.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/CLVTreeScaper $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/CLVTreeScaper2 $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/tools/treescaper
@@ -44,6 +46,13 @@ ADD cloudforest.tar.gz $GALAXY_ROOT/static/plugins/visualizations/
 ADD cloudforest.tar.gz $GALAXY_ROOT/config/plugins/visualizations/
 
 USER root
+
+# This is needed due to an outdated GPG key used for yarn
+RUN apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
+
+# Install dependency for CLVTreeScaper2
+RUN apt-get update && apt-get install -y libpugixml1v5
+
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
 
