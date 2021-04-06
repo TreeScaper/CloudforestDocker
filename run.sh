@@ -81,10 +81,12 @@ fi
 
 if [[ ! -z $CLOUDFOREST_TAG ]]; then
     COMPOSE_FILE_ARGS="$COMPOSE_FILE_ARGS -f docker-compose-remote.yml"
+else
+    COMPOSE_BUILD_ARGS="--build"
 fi
 
 # Bring up service with docker-compose.
-docker-compose $COMPOSE_FILE_ARGS up -d
+docker-compose $COMPOSE_FILE_ARGS up -d $COMPOSE_BUILD_ARGS
 
 if [[ $FOLLOW_LOGS == "true" ]]; then
     docker logs -f "$CONTAINER_NAME"
