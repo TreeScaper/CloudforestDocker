@@ -11,7 +11,7 @@ services:
       TS_CRA_USERNAME: ${TS_CRA_USERNAME}
       NONUSE: "nodejs,reports,proftp"
       GALAXY_CONFIG_CLEANUP: onsuccess
-      GALAXY_DIESTINATIONS_DEFAULT: local_no_container
+      GALAXY_DESTINATIONS_DEFAULT: local_no_container
       GALAXY_SLOTS: 4
 
 volumes:
