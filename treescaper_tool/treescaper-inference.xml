@@ -16,7 +16,7 @@
             #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
             #set $output_suffix = "RAxML_bootstrap.result"
             #else if $tool.id == 'IQTREE_XSEDE':
-            #set $output_suffix = "output.boottrees"
+            #set $output_suffix = "output.treefile"
             #end if
 
             #for $input in $input_collection:
