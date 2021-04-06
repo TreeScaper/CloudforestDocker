@@ -28,7 +28,8 @@
             $__tool_directory__/CLVTreeScaper2
             -inference
             -f $file_list
-            -p $cra_params;
+            -p $cra_params
+            -cl debug;
             find cra_output -name '*${output_suffix}' -exec cat {} + > composite_boottrees.nex
             ]]>
     </command>
