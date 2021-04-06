@@ -55,7 +55,7 @@ vparam.write_boottrees1_=$tool.write_boottrees1_
 vparam.specify_numparts_=$tool.specify_numparts_
 
 # Parameters used by TreeScaper
-treescaper.output=output.boottrees
+treescaper.output=output.treefile
 #end if]]></configfile>
     </configfiles>
     <inputs>
