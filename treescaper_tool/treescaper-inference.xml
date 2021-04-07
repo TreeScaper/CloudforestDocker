@@ -55,6 +55,13 @@ vparam.num_bootreps_=$tool.num_bootreps_
 vparam.write_boottrees1_=$tool.write_boottrees1_
 vparam.specify_numparts_=$tool.specify_numparts_
 
+#if $tool.specify_merit_:
+vparam.specify_merit_=$tool.specify_merit_
+#end if
+#if $tool.specify_aamodels_:
+vparam.specify_aamodels_=$tool.specify_aamodels_
+#end if
+
 # Parameters used by TreeScaper
 treescaper.output=output.treefile
 #end if]]></configfile>
@@ -79,6 +86,19 @@ treescaper.output=output.treefile
                     <option value="b" selected="true">Non-parametric</option>
                     <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
                     <option value="bb">Ultrafast</option>
+                </param>
+                <param argument="-merit" name="specify_merit_" type="select" label="Optimality Criterion">
+                    <option value="" selected="true">Any</option>
+                    <option value="AIC">AIC</option>
+                    <option value="AICc">AICc</option>
+                    <option value="BIC">BIC</option>
+                </param>
+                <param argument="-msub" name="specify_aamodels_" type="select" label="Restrict AA model.">
+                    <option value="" selected="true">No restriction</option>
+                    <option value="nuclear">nuclear</option>
+                    <option value="mitochondrial">mitochondrial</option>
+                    <option value="chloroplast">chloroplast</option>
+                    <option value="viral">viral</option>
                 </param>
                 <param name="num_bootreps_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
                 <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
