@@ -3,4 +3,4 @@ services:
     ports:
       - "127.0.0.1:8022:22"
     environment:
-      NONUSE: "nodejs,reports,proftp"
+      NONUSE: "nodejs,reports"
