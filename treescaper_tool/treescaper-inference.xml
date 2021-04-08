@@ -12,22 +12,26 @@
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
-            #set $file_list = "file_list.txt"
+            #set $input_file = "input_file.txt"
             #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
             #set $output_suffix = "RAxML_bootstrap.result"
             #else if $tool.id == 'IQTREE_XSEDE':
             #set $output_suffix = "output.treefile"
             #end if
 
+	    #if $input_collection
             #for $input in $input_collection:
-            echo $input >> $file_list &&
+            echo $input >> $input_file &&
             #end for
+            #else
+            cat $status_file > $input_file &&
+	    #end if
 
             cat $cra_params > params.txt &&
 
             $__tool_directory__/CLVTreeScaper2
             -inference
-            -f $file_list
+            -f $input_file
             -p $cra_params
             -cl debug;
             find cra_output -name '*${output_suffix}' -exec cat {} + > composite_boottrees.nex
@@ -67,7 +71,8 @@ treescaper.output=output.treefile
 #end if]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_collection" type="data_collection" label="Collection of PHYLIP files."/>
+        <param name="input_collection" type="data_collection" optional="true" label="Collection of PHYLIP files."/>
+        <param name="status_file" type="data" format="txt" optional="true" label="Status file output by previous run of TreeScaper. Can be used to resume job submission if interrupted."/>
         <conditional name="tool">
             <param name="id" type="select" label="Tool" help="Select inference to use via CIPRES REST API.">
                 <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
