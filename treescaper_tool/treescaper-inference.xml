@@ -19,13 +19,14 @@
             #set $output_suffix = "output.treefile"
             #end if
 
-	    #if $input_collection
             #for $input in $input_collection:
-            echo $input >> $input_file &&
+            echo $input.element_identifier >> $input_file &&
+            ln -s $input $input.element_identifier &&
             #end for
-            #else
+
+            #if $status_file
             cat $status_file > $input_file &&
-	    #end if
+            #end if
 
             cat $cra_params > params.txt &&
 
@@ -34,7 +35,12 @@
             -f $input_file
             -p $cra_params
             -cl debug;
-            find cra_output -name '*${output_suffix}' -exec cat {} + > composite_boottrees.nex
+
+            #for $input in $input_collection:
+            #set $output_trees = "cra_output/" + $input.element_identifier + "_" + $output_suffix
+            echo -n "$input.element_identifier " >> composite.trees &&
+            [[ -f $output_trees ]] && cat $output_trees >> composite.trees || echo NO_OUTPUT >> composite.trees;
+            #end for
             ]]>
     </command>
     <configfiles>
@@ -112,7 +118,7 @@ treescaper.output=output.treefile
         </conditional>
     </inputs>
     <outputs>
-        <data name="composite_boottrees.nex" format="cloudforest.trees" from_work_dir="composite_boottrees.nex" label="Bootstrap Trees (all results from input collection)."/>
+        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap Trees (all results from input collection)."/>
         <data name="job_status" format="txt" from_work_dir="cra_output/job_status" label="Job status"/>
         <data name="params" format="txt" from_work_dir="params.txt" label="Params"/>
         <!--
