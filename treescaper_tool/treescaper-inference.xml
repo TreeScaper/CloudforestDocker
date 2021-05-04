@@ -38,8 +38,9 @@
 
             #for $input in $input_collection:
             #set $output_trees = "cra_output/" + $input.element_identifier + "_" + $output_suffix
-            echo -n "$input.element_identifier " >> composite.trees &&
-            [[ -f $output_trees ]] && cat $output_trees >> composite.trees || echo NO_OUTPUT >> composite.trees;
+            echo -n "$input.element_identifier " >> composite.results &&
+            [[ -f $output_trees ]] && cat $output_trees >> composite.results || echo NO_OUTPUT >> composite.results;
+            grep -v NO_OUTPUT composite.results | awk '{print $2}' > composite.trees;
             #end for
             ]]>
     </command>
@@ -118,7 +119,8 @@ treescaper.output=output.treefile
         </conditional>
     </inputs>
     <outputs>
-        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap Trees (all results from input collection)."/>
+        <data name="composite.results" format="tabular" from_work_dir="composite.results" label="Bootstrap Results (all results from input collection)."/>
+        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap Trees (all successful output trees from input collection)."/>
         <data name="job_status" format="txt" from_work_dir="cra_output/job_status" label="Job status"/>
         <data name="params" format="txt" from_work_dir="params.txt" label="Params"/>
         <!--
