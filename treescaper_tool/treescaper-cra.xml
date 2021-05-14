@@ -82,8 +82,8 @@ treescaper.output=output.treefile
         <param name="status_file" type="data" format="txt" optional="true" label="Status file output by previous run of TreeScaper. Can be used to resume job submission if interrupted."/>
         <conditional name="tool">
             <param name="id" type="select" label="Tool" help="Select CIPRES REST API tool.">
-                <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
                 <option value="IQTREE_XSEDE">IQ-TREE</option>
+                <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
             </param>
             <when value="RAXMLHPC8_REST_XSEDE">
                 <param name="choose_bootstrap_" type="select" label="Bootstrap type">
