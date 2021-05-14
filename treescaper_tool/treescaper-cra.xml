@@ -1,4 +1,4 @@
-<tool id="treescaper-inference" name="TreeScaper-Inference" version="@TREESCAPER2_VERSION@+galaxy0">
+<tool id="treescaper-cra" name="TreeScaper-CRA" version="@TREESCAPER2_VERSION@+galaxy0">
     <description>
         <![CDATA[
             (Warning: The current version of this wrapper does not fail if the underlying CLVTreeScaper2 program fails. This is done so that the job status file can be retrieved and output,
@@ -31,7 +31,7 @@
             cat $cra_params > params.txt &&
 
             $__tool_directory__/CLVTreeScaper2
-            -inference
+            -cra
             -f $input_file
             -p $cra_params
             -cl debug;
@@ -81,7 +81,7 @@ treescaper.output=output.treefile
         <param name="input_collection" type="data_collection" optional="true" label="Collection of PHYLIP files."/>
         <param name="status_file" type="data" format="txt" optional="true" label="Status file output by previous run of TreeScaper. Can be used to resume job submission if interrupted."/>
         <conditional name="tool">
-            <param name="id" type="select" label="Tool" help="Select inference to use via CIPRES REST API.">
+            <param name="id" type="select" label="Tool" help="Select CIPRES REST API tool.">
                 <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
                 <option value="IQTREE_XSEDE">IQ-TREE</option>
             </param>

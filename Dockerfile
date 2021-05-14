@@ -17,7 +17,7 @@ RUN startup_lite && \
 USER galaxy
 RUN mkdir $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
-ADD ./treescaper_tool/treescaper-inference.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper-cra.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-affinity.xml $GALAXY_ROOT/tools/treescaper

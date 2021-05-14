@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolbox monitor="true">
   <section id="cloudforest" name="CloudForest">
-    <tool file="treescaper/treescaper-inference.xml" />
+    <tool file="treescaper/treescaper-cra.xml" />
     <tool file="treescaper/treescaper-trees.xml" />
     <tool file="treescaper/treescaper-nldr.xml" />
     <tool file="treescaper/treescaper-community.xml" />
