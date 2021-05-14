@@ -119,13 +119,9 @@ treescaper.output=output.treefile
         </conditional>
     </inputs>
     <outputs>
-        <data name="composite.results" format="tabular" from_work_dir="composite.results" label="Bootstrap Results (all results from input collection)."/>
-        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap Trees (all successful output trees from input collection)."/>
+        <data name="composite.results" format="tabular" from_work_dir="composite.results" label="Bootstrap results (all results from input collection)."/>
+        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap trees (all successful output trees from input collection)."/>
         <data name="job_status" format="txt" from_work_dir="cra_output/job_status" label="Job status"/>
-        <data name="params" format="txt" from_work_dir="params.txt" label="Params"/>
-        <!--
-        <collection name="output" format="nex" type="list" label="${on_string}" >
-        </collection>
-        -->
+        <data name="parameters" format="txt" from_work_dir="params.txt" label="Parameters"/>
     </outputs>
 </tool>
