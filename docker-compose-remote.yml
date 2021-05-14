@@ -1,0 +1,3 @@
+services:
+  cloudforest:
+    image: cloudforestphylogenomics/cloudforest_galaxy:$CLOUDFOREST_TAG

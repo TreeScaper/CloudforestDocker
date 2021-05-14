@@ -195,13 +195,35 @@ $ docker run -it ubuntu bash</code></pre>
 <p>It may be necessary to clean your docker installation periodically. Read about the <a href="https://docs.docker.com/engine/reference/commandline/system_prune/"><strong>prune</strong></a> command in the docker documentation. This command will remove all unused data and docker objects. Be careful using this command especially if you have not moved data files from the container into your local file space.</p>
 <h2 id="running-docker-cloudforest">Running Docker CloudForest</h2>
 <h3 id="run.sh"><code>run.sh</code></h3>
-<p>A simple script <code>run.sh</code> is provided to run the project. To get started with a local instance <em>without</em> data perstitance, run:</p>
-<pre><code>./run.sh dev cloudforest_dev</code></pre>
-<p>This builds an image named <code>cloudforestphylogenomics/cloudforest_galaxy:dev</code>, and runs it in a local container named <code>cloudforest_dev</code>. You may be prompted to confirm that the script may delete existing images or containers with the same name. To override this prompt, the <code>-d</code> flag may be used.</p>
-<p>To run an instance with data persistence, first we need to create a volume, and pass it with <code>-v</code> as an argument to <code>run.sh</code>:</p>
-<pre><code>docker volume create cloudforest-volume
-./run.sh -v cloudforest-volume dev cloudforest_dev</code></pre>
-<p>The <code>-s</code> option can be used to enable SFTP for file-upload, which currently should only be used in a local, single-user context. See the <code>Uploading Files</code> section below.</p>
+<p>A simple script <code>run.sh</code> is provided for starting and stopping CloudForest. To run with the latest image from Docker Hub:</p>
+<pre><code>./run.sh --tag latest</code></pre>
+<p>If the <code>--tag</code> argument is left out, it will build the image locally:</p>
+<pre><code>./run.sh</code></pre>
+<p>A volume is created for data persistence by the name provided in <code>.env</code>, which is automatically created from <code>.env.example</code>. The volume can be removed with <code>docker volume rm &lt;volume name&gt;</code>.</p>
+<p>The <code>--sftp</code> option can be used to enable SFTP for file-upload, which currently should only be used in a local, single-user context. See the <code>Uploading Files</code> section below.</p>
+<p>The <code>run.sh</code> simply manages these user options (<code>./run.sh --usage</code> will display all options) and runs docker-compose, providing the necessary combination of docker-compose yaml files. The base docker-compose configuration is <code>docker-compose.yml</code>. Here you’ll find environment variables, port mappings, and volumes configuration. Many docker-compose options translate to command-line options that would be used with <code>docker run</code>. Explanations for some of the command-line analogues we use can be found below.</p>
+<ul>
+<li><p>-d -p 8080:80</p>
+<p>CloudForest is a web application and like all web applications it listens on a port. In this case port 80. A docker container must map ports on the local machine (your computer) into the container. The <em><strong>-p</strong></em> argument maps the local port 8080 to the container port 80. You will use the 8080 port address when opening the application via the browser. The <em><strong>-d</strong></em> argument runs CloudForest as a daemon service.</p></li>
+<li><p>--name cloudforest</p>
+<p>The running container is given a name with this argument. Multiple containers can run at the same time on any one machine. By default each container will be given an id something like <em>63289272e49b</em>. Use the <em><strong>--name</strong></em> argument to give the container a good, memorable name. This name will be used to stop, or if necessary directly access, the container.</p></li>
+<li><p>-e “GALAXY_DESTINATIONS_DEFAULT=local_no_container”</p>
+<p>The <em><strong>-e</strong></em> flag sets environment variables inside the container. In this case we are telling CloudForest to run all tools within the container. It is possible to run tools on <a href="https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)">HPC compute nodes or external clusters</a>. Using external clusters is outside the scope of this document.</p></li>
+<li><p>-e “GALAXY_SLOTS=2”</p>
+<p>This varible starts the application with 2 threads. If you have a local machine with multiple cores, you can increase this number.</p></li>
+<li><p>cloudforestphylogenomics/cloudforest_galaxy:latest</p>
+<p>This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have <em>not</em> pulled the image, docker will first pull the image from the docker hub and then run the container.</p></li>
+</ul>
+<p>Docker does allow for data persistence over time. This is done by mapping a docker volume into the container.</p>
+<pre><code>docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<p>The <em><strong>–mount</strong></em> option is used for volume mapping.</p>
+<pre><code>--mount source=cloudforest-volume,target=/export/</code></pre>
+<p>Volumes can be created like so:</p>
+<pre><code>docker volume create cloudforest-volume</code></pre>
+<p>Docker applications are containers running within your host computer operating system. If you are using a Mac, the host OS is MacOS and the container’s OS is Linux (CloudForest is always run within Ubuntu).</p>
+<p>Running CloudForest in this way mounts the Docker volume to the <em><strong>/export</strong></em> path within connected to the container’s filesystem. This is where the Galaxy database, data, and configuration files are stored.</p>
+<p>Each time you start CloudForest using the same <em><strong>–mount</strong></em> option, CloudForest will use the database, data, and configuration files found on the volume. This gives you data permanence across CloudForest starts and stops.</p>
+<p>You can create and use multiple Docker volumes for completely separate CloudForest data installations.</p>
 <h3 id="uploading-files">Uploading Files</h3>
 <p>Galaxy documentation <a href="https://galaxyproject.org/tutorials/upload/">recommends</a> only using the basic local file upload for small numbers of files. For many files, or larger files FTP is recommended. Due to some limitations with running an FTP server within Docker, SFTP is a more viable method for uploading files in bulk.</p>
 <h4 id="sftp-warning-this-option-comes-with-security-considerations---see-below.">SFTP (Warning: this option comes with security considerations - see below.)</h4>
@@ -226,51 +248,16 @@ $ docker run -it ubuntu bash</code></pre>
 <p><code>sftp</code> is a command-line program for uploading/downloading that is likely already installed if your machine is running MacOS or Linux. File upload can be achieved with the following command:</p>
 <pre><code>sftp -P 8022 -o User=&lt;your username&gt; 127.0.0.1 &lt;&lt;&lt; $&#39;put &lt;path to your files&gt;&#39;</code></pre>
 <p>File globbing may be used here for the filepath, e.g. <code>/my/text/files/*.txt</code> will upload all <code>.txt</code> files in that directory.</p>
-<h3 id="running-with-no-data-persistence">Running with No Data Persistence</h3>
-<p>Containers are by default ephemeral applications. When you run CloudForest using the following command no data is saved once the application is stopped.</p>
-<blockquote>
-<p><strong>NB: No data is saved between invocations using the default command.</strong></p>
-</blockquote>
-<p>CloudForest is run with the docker run command with additional arguments:</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
-<p>What are the arguments?</p>
-<ul>
-<li><p>-d -p 8080:80</p>
-<p>CloudForest is a web application and like all web applications it listens on a port. In this case port 80. A docker container must map ports on the local machine (your computer) into the container. The <em><strong>-p</strong></em> argument maps the local port 8080 to the container port 80. You will use the 8080 port address when opening the application via the browser. The <em><strong>-d</strong></em> argument runs CloudForest as a daemon service.</p></li>
-<li><p>--name cloudforest</p>
-<p>The running container is given a name with this argument. Multiple containers can run at the same time on any one machine. By default each container will be given an id something like <em>63289272e49b</em>. Use the <em><strong>--name</strong></em> argument to give the container a good, memorable name. This name will be used to stop, or if necessary directly access, the container.</p></li>
-<li><p>-e “GALAXY_DESTINATIONS_DEFAULT=local_no_container”</p>
-<p>The <em><strong>-e</strong></em> flag sets environment variables inside the container. In this case we are telling CloudForest to run all tools within the container. It is possible to run tools on <a href="https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)">HPC compute nodes or external clusters</a>. Using external clusters is outside the scope of this document.</p></li>
-<li><p>-e “GALAXY_SLOTS=2”</p>
-<p>This varible starts the application with 2 threads. If you have a local machine with multiple cores, you can increase this number.</p></li>
-<li><p>cloudforestphylogenomics/cloudforest_galaxy:latest</p>
-<p>This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have <em>not</em> pulled the image, docker will first pull the image from the docker hub and then run the container.</p></li>
-</ul>
-<p><strong>This is odd, why would I want to run CloudForest with no data persistence?</strong></p>
-<p>Running Docker in this default mode allows for an instance that does not add data to your local machine. If you are exploring data, or learning how to use the tools, and are not yet interested in building a traceable history, this mode is ideal. In addition, if there is a surprising, interesting output you can always download the data from CloudForest to your local OS even in this ephemeral mode.</p>
-<h3 id="running-the-image-with-data-persistence">Running the Image with Data Persistence</h3>
-<p>Docker does allow for data persistence over time. This is done by mapping local filespace into the container.</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/user/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
-<p>The <em><strong>-v</strong></em> option is used for volume mapping.</p>
-<pre><code>-v /home/user/galaxy_storage/:/export/</code></pre>
-<p>Docker applications are containers running within your host computer operating system. If you are using a Mac, the host OS is macOS and the container’s OS is linux (CloudForest is always run within Ubuntu).</p>
-<p>Running CloudForest with the <em><strong>-v</strong></em> option opens a tunnel from the host OS (macOS in the example) into the container OS. In the above example the host path <em>/home/user/galaxy_storage/</em> is directly connected to the container’s folder <em>/export</em>.</p>
-<p>When CloudForest is run with the <em><strong>-v</strong></em> option, the database and data files are stored on your local host environment within the path <em>/home/user/galaxy_storage</em>.</p>
-<p>You can use any local path you would like (the left hand side of the colon), the <em><strong>/export/</strong></em> path is <strong>mandatory</strong>. CloudForest is built to write all of its data to the container path <em><strong>/export/</strong></em>.</p>
-<p>Each time you start CloudForest using the same <em><strong>-v</strong></em> option, CloudForest will use the database and data files found on the local OS path. This gives you data permanence across CloudForest starts and stops.</p>
-<p>You can specifiy multiple, unique <em><strong>-v</strong></em> options. In that case you will have completely separate CloudForest data installations existing in your local file space.</p>
 <h2 id="using-cloudforest">Using CloudForest</h2>
 <blockquote>
 <p>NB: Docker commands are run from the terminal command line.</p>
 </blockquote>
-<p>This is the recommended command for running CloudForest on macOS (assuming the user’s name is <em>jdoe</em>):</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /User/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
-<p>This is the recommended command for running CloudForest on a linux distribution (assuming the user’s name is <em>jdoe</em>):</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<p>This is the recommended command for running CloudForest on MacOS and Linux platforms:</p>
+<pre><code>./run.sh --tag latest</code></pre>
 <p>This is the recommended command for running CloudForest on Windows 10 (assuming the user’s name is <em>jdoe</em>):</p>
 <pre><code>TODO</code></pre>
 <p>It will take a minute or two for CloudForest to start once you invoke the docker run command.</p>
-<p>If your computer has more than 4 cores, setting “GALAXY_SLOTS=4” is a good setting.</p>
+<p>If your computer has more than 4 cores, setting “GALAXY_SLOTS=4” in <code>docker-compose.yml</code> is a good setting.</p>
 <ol type="1">
 <li><p>Open a browser</p></li>
 <li><p>Enter the address<br></p>
