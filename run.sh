@@ -85,6 +85,14 @@ else
     COMPOSE_BUILD_ARGS="--build"
 fi
 
+# Read CRA credentials
+read -p "CRA username: " TS_CRA_USERNAME
+read -s -p "CRA password (characters will not be displayed as you type): " TS_CRA_PASSWORD
+echo
+
+export TS_CRA_USERNAME
+export TS_CRA_PASSWORD
+
 # Bring up service with docker-compose.
 docker-compose $COMPOSE_FILE_ARGS up -d $COMPOSE_BUILD_ARGS
 
