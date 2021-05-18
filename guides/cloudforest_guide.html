@@ -159,18 +159,18 @@
 <h3 id="docker-installation">Docker Installation</h3>
 <p>To run CloudForest, you will have to install Docker. Please follow these <a href="https://www.docker.com/products/docker-desktop"><strong>instructions</strong></a> to install Docker for your operating system.</p>
 <h3 id="docker-pull-and-run-commands">Docker Pull and Run Commands</h3>
-<p>The CloudForest Docker image is stored on <a href="https://hub.docker.com/repository/docker/cloudforestphylogenomics/cloudforest_galaxy"><strong>Docker hub</strong></a>.</p>
+<p>The CloudForest Docker image is stored on <a href="https://hub.docker.com/repository/docker/cloudforestphylo/cloudforestgalaxy"><strong>Docker hub</strong></a>.</p>
 <blockquote>
 <p><strong>NB: Docker commands are run from the terminal command line.</strong></p>
 </blockquote>
 <h4 id="pulling-the-image">Pulling the Image</h4>
 <p>You can download the image to your computer with the following <a href="https://docs.docker.com/engine/reference/commandline/pull/"><strong>command</strong></a>:</p>
-<pre><code>docker pull cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker pull cloudforestphylo/cloudforestgalaxy:latest</code></pre>
 <p>This command contacts Docker hub and pulls down the latest image of CloudForest.</p>
 <p>You can verify the download with the command:</p>
 <pre><code>docker images</code></pre>
 <p>You will see something like this:</p>
-<pre><code>cloudforestphylogenomics/cloudforest_galaxy  latest  160a642eee15  4 days ago  2.12GB</code></pre>
+<pre><code>cloudforestphylo/cloudforestgalaxy  latest  160a642eee15  4 days ago  2.12GB</code></pre>
 <p>The number <em>160a642eee15</em> is an arbitraty ID assigned to the container by Docker. You do not have to use the ID number.</p>
 <h4 id="running-a-docker-image">Running a Docker Image</h4>
 <p>In general you run any image with the following <a href="https://docs.docker.com/engine/reference/commandline/run/"><strong>command</strong></a>:</p>
@@ -211,11 +211,11 @@ $ docker run -it ubuntu bash</code></pre>
 <p>The <em><strong>-e</strong></em> flag sets environment variables inside the container. In this case we are telling CloudForest to run all tools within the container. It is possible to run tools on <a href="https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)">HPC compute nodes or external clusters</a>. Using external clusters is outside the scope of this document.</p></li>
 <li><p>-e “GALAXY_SLOTS=2”</p>
 <p>This varible starts the application with 2 threads. If you have a local machine with multiple cores, you can increase this number.</p></li>
-<li><p>cloudforestphylogenomics/cloudforest_galaxy:latest</p>
+<li><p>cloudforestphylo/cloudforestgalaxy:latest</p>
 <p>This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have <em>not</em> pulled the image, docker will first pull the image from the docker hub and then run the container.</p></li>
 </ul>
 <p>Docker does allow for data persistence over time. This is done by mapping a docker volume into the container.</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylo/cloudforestgalaxy:latest</code></pre>
 <p>The <em><strong>–mount</strong></em> option is used for volume mapping.</p>
 <pre><code>--mount source=cloudforest-volume,target=/export/</code></pre>
 <p>Volumes can be created like so:</p>

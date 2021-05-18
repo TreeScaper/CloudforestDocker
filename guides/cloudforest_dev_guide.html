@@ -162,7 +162,7 @@
 <li><p>CloudForest Docker</p>
 <p>Docker and ancillary files for bundling the application into a Galaxy workflow image</p></li>
 </ol>
-<p>The code units are brought together to build and publish a Docker container on <a href="https://hub.docker.com/repository/docker/cloudforestphylogenomics/cloudforest_galaxy">Docker Hub</a>.</p>
+<p>The code units are brought together to build and publish a Docker container on <a href="https://hub.docker.com/repository/docker/cloudforestphylo/cloudforestgalaxy">Docker Hub</a>.</p>
 <h2 id="general-development-flow">General Development Flow</h2>
 <p><img src="DevFlow3.png" /></p>
 <h2 id="github-repositories">Github Repositories</h2>
@@ -194,7 +194,7 @@
 <p>CloudForest can be configured to use <a href="https://github.com/bgruening/docker-galaxy-stable#Running-on-an-external-cluster-(DRM)">external compute clusters</a>. This functionality is not enabled for the current release.</p>
 <h3 id="docker-and-data-permanence">Docker and Data Permanence</h3>
 <p>Docker containers run within a non-local environment, once the Docker engine stops the container all state is lost. Running CloudForest with the following command</p>
-<pre><code>docker run -d -p 8080:80 --name cf_galaxy -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=4&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cf_galaxy -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=4&quot; cloudforestphylo/cloudforestgalaxy:latest</code></pre>
 <p>will not let the user save data files. If they have downloaded the files into their local filesystem the data is, of course, saved. Docker has two methods for persisting data from the container into the local file space: <strong>volumes</strong> and <strong>bind mounts</strong>.</p>
 <h4 id="volumes">Volumes</h4>
 <p>Docker <a href="https://docs.docker.com/storage/volumes/">volumes</a> are similar to containers and are fully managed via docker commands. Data is persisted within a volume and any volume can be shared between containers. For CloudForest, volumes are now preferred to bind mounts.</p>
@@ -203,7 +203,7 @@
 </blockquote>
 <p>Data persistence with volumes can be achieved by 1) creating the volume, and 2) running the Galaxy container with volume mapped in:</p>
 <pre><code>docker volume create cloudforest-volume
-docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylo/cloudforestgalaxy:latest</code></pre>
 <h4 id="bind-mounts">Bind Mounts</h4>
 <p>Docker <a href="https://docs.docker.com/storage/bind-mounts/">bind mounts</a> are the original method for persisting data out of a running container. This method is not preferred, but instructions are listed below for interested users.</p>
 <p>Bind mounts open a filesystem channel from the container out to the host file system. When mounted, the container will write files directly to host space. This is the general form of the command:</p>
@@ -211,7 +211,7 @@ docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,ta
 <p>The -v argument maps the container directory <em>/app</em> to the host directory <em>/local/system/path/target</em>. Any file the containerized application writes to <em>/app</em> is written into the host file system. When the container is stopped, the data continues to exist on the host. The mapping works in both directions. A user can add files into the host directory and the files are visible from within the running container.</p>
 <p><strong>Note</strong>: On MacOS the host directory used for the bind mount may need allowed in Docker Desktop. This can be done by navigating to <code>Preferences -&gt; Resources -&gt; File Sharing</code> and adding the directory the list found there.</p>
 <p>Starting CloudForest using bind mounts:</p>
-<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylogenomics/cloudforest_galaxy:latest</code></pre>
+<pre><code>docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e &quot;GALAXY_DESTINATIONS_DEFAULT=local_no_container&quot; -e &quot;GALAXY_SLOTS=2&quot; cloudforestphylo/cloudforestgalaxy:latest</code></pre>
 <p>The LHS of the colon can be any legal, local OS path. The RHS of the colon <strong>must</strong> be <em>/export/</em>. The base Galaxy image has been coded to use <em>/export/</em> as its app root directory.</p>
 <p>As long as the LHS path is used for each application start, CloudForest will use the DB and files saved from the last run. If another LHS path is used, CloudForest will start with a blank DB and no data files.</p>
 <p>You can see why using Docker volumes is a clean method of data transfer. Bind mounts tie saved data to the local file system structure, while Docker volumes abstract away the local environment. This abstraction does come at the cost of using more Docker commands. Nullum gratuitum prandium.</p>

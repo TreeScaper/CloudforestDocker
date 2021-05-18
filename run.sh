@@ -10,7 +10,7 @@ print_help () {
 Usage: ./run_it.sh [--tag tag_name] [--sftp] [--follow]
 
 --tag <tag_name>
-Run an image from the cloudforestphylogenomics/cloudforest_galaxy
+Run an image from the cloudforestphylo/cloudforestgalaxy:latest
 repository with the tag <tag_name>. Use latest for the most recent build from master.
 
 --sftp

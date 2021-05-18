@@ -12,7 +12,7 @@ To run CloudForest, you will have to install Docker. Please follow these [**inst
 
 ### Docker Pull and Run Commands
 
-The CloudForest Docker image is stored on [**Docker hub**](https://hub.docker.com/repository/docker/cloudforestphylogenomics/cloudforest_galaxy).
+The CloudForest Docker image is stored on [**Docker hub**](https://hub.docker.com/repository/docker/cloudforestphylo/cloudforestgalaxy).
 
 > **NB: Docker commands are run from the terminal command line.**
 
@@ -20,7 +20,7 @@ The CloudForest Docker image is stored on [**Docker hub**](https://hub.docker.co
 
 You can download the image to your computer with the following [**command**](https://docs.docker.com/engine/reference/commandline/pull/):
 
-    docker pull cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker pull cloudforestphylo/cloudforestgalaxy:latest
 
 This command contacts Docker hub and pulls down the latest image of CloudForest.
 
@@ -30,7 +30,7 @@ You can verify the download with the command:
 
 You will see something like this:
 
-    cloudforestphylogenomics/cloudforest_galaxy  latest  160a642eee15  4 days ago  2.12GB
+    cloudforestphylo/cloudforestgalaxy  latest  160a642eee15  4 days ago  2.12GB
 
 The number _160a642eee15_ is an arbitraty ID assigned to the container by Docker. You do not have to use the ID number.  
 
@@ -99,13 +99,13 @@ The `run.sh` simply manages these user options (`./run.sh --usage` will display 
 
     This varible starts the application with 2 threads. If you have a local machine with multiple cores, you can increase this number.
 
-* cloudforestphylogenomics/cloudforest_galaxy:latest
+* cloudforestphylo/cloudforestgalaxy:latest
 
     This is the docker image. If you have pulled the image, docker will run with the locally cached image. If you have *not* pulled the image, docker will first pull the image from the docker hub and then run the container.
 
 Docker does allow for data persistence over time. This is done by mapping a docker volume into the container.
 
-    docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylo/cloudforestgalaxy:latest
 
 The *__--mount__* option is used for volume mapping.
 
