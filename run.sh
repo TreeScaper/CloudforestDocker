@@ -37,6 +37,9 @@ ALLOW_SFTP=false
 # Follow log output after running container.
 FOLLOW_LOGS=false
 
+# Are we bringing the CloudForest down.
+STOP_CONTAINER=false
+
 # Optional arguments before the required tag and container name
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -54,8 +57,8 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
     "--stop")
-        docker-compose down
-        exit 0
+        STOP_CONTAINER=true
+        shift
         ;;
     "--help"|"--usage")
         print_help
@@ -81,8 +84,14 @@ fi
 
 if [[ ! -z $CLOUDFOREST_TAG ]]; then
     COMPOSE_FILE_ARGS="$COMPOSE_FILE_ARGS -f docker-compose-remote.yml"
+    docker-compose $COMPOSE_FILE_ARGS pull cloudforest
 else
     COMPOSE_BUILD_ARGS="--build"
+fi
+
+if [[ $STOP_CONTAINER == "true" ]]; then
+    docker-compose $COMPOSE_FILE_ARGS down
+    exit 0
 fi
 
 # Read CRA credentials
