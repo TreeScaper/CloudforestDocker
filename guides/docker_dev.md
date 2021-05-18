@@ -14,7 +14,7 @@ CloudForest is comprised of three separate code units:
 
     Docker and ancillary files for bundling the application into a Galaxy workflow image
 
-The code units are brought together to build and publish a Docker container on [Docker Hub](https://hub.docker.com/repository/docker/cloudforestphylogenomics/cloudforest_galaxy).
+The code units are brought together to build and publish a Docker container on [Docker Hub](https://hub.docker.com/repository/docker/cloudforestphylo/cloudforestgalaxy).
 
 ## General Development Flow
 
@@ -73,7 +73,7 @@ CloudForest can be configured to use [external compute clusters](https://github.
 
 Docker containers run within a non-local environment, once the Docker engine stops the container all state is lost. Running CloudForest with the following command
 
-    docker run -d -p 8080:80 --name cf_galaxy -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cf_galaxy -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=4" cloudforestphylo/cloudforestgalaxy:latest
 
 will not let the user save data files. If they have downloaded the files into their local filesystem the data is, of course, saved. Docker has two methods for persisting data from the container into the local file space: **volumes** and **bind mounts**.
 
@@ -86,7 +86,7 @@ Docker [volumes](https://docs.docker.com/storage/volumes/) are similar to contai
 Data persistence with volumes can be achieved by 1) creating the volume, and 2) running the Galaxy container with volume mapped in:
 
 	docker volume create cloudforest-volume
-	docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+	docker run -d -p 8080:80 --name cloudforest --mount source=cloudforest-volume,target=/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylo/cloudforestgalaxy:latest
 
 #### Bind Mounts
 
@@ -103,7 +103,7 @@ The -v argument maps the container directory */app* to the host directory */loca
 
 Starting CloudForest using bind mounts:
 
-    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylogenomics/cloudforest_galaxy:latest
+    docker run -d -p 8080:80 --name cloudforest -v /home/jdoe/galaxy_storage/:/export/ -e "GALAXY_DESTINATIONS_DEFAULT=local_no_container" -e "GALAXY_SLOTS=2" cloudforestphylo/cloudforestgalaxy:latest
 
 The LHS of the colon can be any legal, local OS path. The RHS of the colon **must** be */export/*. The base Galaxy image has been coded to use */export/* as its app root directory.
 
