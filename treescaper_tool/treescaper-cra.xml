@@ -65,7 +65,28 @@ vparam.bootstrap_type_=$tool.bootstrap_type_
 vparam.num_bootreps_=$tool.num_bootreps_
 vparam.write_boottrees1_=$tool.write_boottrees1_
 vparam.specify_numparts_=$tool.specify_numparts_
-
+vparam.sequence_type_=$tool.sequence_type_
+#if $tool.specify_outgroup_:
+vparam.specify_outgroup_=$tool.specify_outgroup_
+#end if
+#if $tool.basemodel.specify_basemodels_:
+vparam.specify_basemodels_=$tool.basemodel.specify_basemodels_
+#end if
+#if $tool.specify_maxcat_:
+vparam.specify_maxcat_=$tool.specify_maxcat_
+#end if
+#if $tool.specify_dnamodel_:
+vparam.specify_dnamodel_=$tool.specify_dnamodel_
+#end if
+#if $tool.specify_protmodel_:
+vparam.specify_protmodel_=$tool.specify_protmodel_
+#end if
+#if $tool.specify_modelfreq_:
+vparam.specify_modelfreq_=$tool.specify_modelfreq_
+#end if
+#if $tool.specify_modelrate_:
+vparam.specify_modelrate_=$tool.specify_modelrate_
+#end if
 #if $tool.specify_merit_:
 vparam.specify_merit_=$tool.specify_merit_
 #end if
@@ -94,25 +115,150 @@ treescaper.output=output.treefile
                 <param name="bootstrap_value_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
             </when>
             <when value="IQTREE_XSEDE">
-                <param name="bootstrap_type_" type="select" label="Bootstrap type">
-                    <option value="b" selected="true">Non-parametric</option>
-                    <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
-                    <option value="bb">Ultrafast</option>
+
+                <param name="sequence_type_" argument="-st" type="select" label="Sequence type">
+                    <option value="DNA" selected="true">DNA</option>
+                    <option value="AA">AA</option>
+                    <option value="BIN">BIN</option>
+                    <option value="MORPH">MORPH</option>
+                    <option value="CODON">CODON</option>
+                    <option value="NT2AA">NT2AA</option>
                 </param>
-                <param argument="-merit" name="specify_merit_" type="select" label="Optimality Criterion">
-                    <option value="" selected="true">Any</option>
+                <param name="specify_outgroup_" argument="-o" label="Specify outgroup" type="text" optional="true"/>
+                <conditional name="basemodel">
+                    <param name="id" type="select" label="Specify base models" help="" optional="true">
+                        <option value="program">By compatibility with tool</option>
+                        <option value="base_models">By list</option>
+                    </param>
+                    <when value="program">
+                        <param name="specify_basemodels_" argument="-mset" type="select" label="Tool" optional="true">
+                            <option value="raxml">RAxML</option>
+                            <option value="phyml">PhyML</option>
+                            <option value="mrbayes">MrBayes</option>
+                        </param>
+                    </when>
+                    <when value="base_models">
+                        <param name="specify_basemodels_" argument="-mset" label="Base models" type="select" multiple="true">
+                            <option value="Blosum62">Blosum62</option>
+                            <option value="cpREV">cpREV</option>
+                            <option value="Dayhoff">Dayhoff</option>
+                            <option value="DCMut">DCMut</option>
+                            <option value="FLU">FLU</option>
+                            <option value="HIVb">HIVb</option>
+                            <option value="HIVw">HIVw</option>
+                            <option value="JTT">JTT</option>
+                            <option value="JTTDCMut">JTTDCMut</option>
+                            <option value="LG">LG</option>
+                            <option value="mtART">mtART</option>
+                            <option value="mtMAM">mtMAM</option>
+                            <option value="mtREV">mtREV</option>
+                            <option value="mtZOA">mtZOA</option>
+                            <option value="mtMet">mtMet</option>
+                            <option value="mtVer">mtVer</option>
+                            <option value="mtInv">mtInv</option>
+                            <option value="Poisson">Poisson</option>
+                            <option value="PMB">PMB</option>
+                            <option value="rtREV">rtREV</option>
+                            <option value="VT">VT</option>
+                            <option value="WAG">WAG</option>
+                            <option value="GTR20">GTR20</option>
+                        </param>
+                    </when>
+                </conditional>
+                <param name="specify_maxcat_" argument="-cmax" label="maximum number of categories for FreeRate model" type="integer" optional="true"/>
+                <param name="specify_dnamodel_" argument="-m" type="select" label="DNA model" optional="true">
+                    <option value="JC69">JC69</option>
+                    <option value="F81">F81</option>
+                    <option value="K80">K80</option>
+                    <option value="HKY">HKY</option>
+                    <option value="TN93">TN93</option>
+                    <option value="TNe">TNe</option>
+                    <option value="K81">K81</option>
+                    <option value="K81u">K81u</option>
+                    <option value="TPM2">TPM2</option>
+                    <option value="TPM2u">TPM2u</option>
+                    <option value="TPM3">TPM3</option>
+                    <option value="TPM3u">TPM3u</option>
+                    <option value="TIM">TIM</option>
+                    <option value="TIMe">TIMe</option>
+                    <option value="TIM2">TIM2</option>
+                    <option value="TIM2e">TIM2e</option>
+                    <option value="TIM3">TIM3</option>
+                    <option value="TIM3e">TIM3e</option>
+                    <option value="TVM">TVM</option>
+                    <option value="TVMe">TVMe</option>
+                    <option value="SYM">SYM</option>
+                    <option value="GTR">GTR</option>
+                </param>
+                <param name="specify_protmodel_" argument="-m" type="select" label="Protein model" optional="true">
+                    <option value="BLOSUM62">BLOSUM62</option>
+                    <option value="cpREV">cpREV</option>
+                    <option value="Dayhoff">Dayhoff</option>
+                    <option value="DCMut">DCMut</option>
+                    <option value="FLU">FLU</option>
+                    <option value="HIVb">HIVb</option>
+                    <option value="HIVw">HIVw</option>
+                    <option value="JTT">JTT</option>
+                    <option value="JTTDCMut">JTTDCMut</option>
+                    <option value="LG">LG</option>
+                    <option value="mtART">mtART</option>
+                    <option value="mtMAM">mtMAM</option>
+                    <option value="mtREV">mtREV</option>
+                    <option value="mtZOA">mtZOA</option>
+                    <option value="Poisson">Poisson</option>
+                    <option value="PMB">PMB</option>
+                    <option value="rtREV">rtREV</option>
+                    <option value="VT">VT</option>
+                    <option value="WAG">WAG</option>
+                    <option value="C10">C10</option>
+                    <option value="C20">C20</option>
+                    <option value="C30">C30</option>
+                    <option value="C40">C40</option>
+                    <option value="C50">C50</option>
+                    <option value="C60">C60</option>
+                    <option value="EX2">EX2</option>
+                    <option value="EX3">EX3</option>
+                    <option value="EHO">EHO</option>
+                    <option value="UL2">UL2</option>
+                    <option value="UL3">UL3</option>
+                    <option value="EX_EHO">EX_EHO</option>
+                    <option value="LG4M">LG4M</option>
+                    <option value="LG4X">LG4X</option>
+                    <option value="CF4">CF4</option>
+                </param>
+                <param name="specify_modelfreq_" type="select" label="Model frequency" optional="true">
+                    <option value="+F">+F</option>
+                    <option value="+FO">+FO</option>
+                    <option value="+FQ">+FQ</option>
+                    <option value="+F1x4">+F1x4</option>
+                    <option value="+F3x4">+F3x4</option>
+                </param>
+                <param name="specify_modelrate_" type="select" label="Rate heterogeneity" optional="true">
+                    <option value="+I">+I</option>
+                    <option value="+G">+G</option>
+                    <option value="+I+G">+I+G</option>
+                    <option value="+R">+R</option>
+                    <option value="+I+R">+I+R</option>
+                </param>
+
+
+                <param name="bootstrap_type_" type="select" label="Bootstrap type">
+                    <option value="b">Non-parametric</option>
+                    <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
+                    <option value="bb" selected="true">Ultrafast</option>
+                </param>
+                <param argument="-merit" name="specify_merit_" type="select" label="Optimality Criterion" optional="true">
                     <option value="AIC">AIC</option>
                     <option value="AICc">AICc</option>
                     <option value="BIC">BIC</option>
                 </param>
-                <param argument="-msub" name="specify_aamodels_" type="select" label="Restrict AA model.">
-                    <option value="" selected="true">No restriction</option>
+                <param argument="-msub" name="specify_aamodels_" type="select" label="Restrict AA model." optional="true">
                     <option value="nuclear">nuclear</option>
                     <option value="mitochondrial">mitochondrial</option>
                     <option value="chloroplast">chloroplast</option>
                     <option value="viral">viral</option>
                 </param>
-                <param name="num_bootreps_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
+                <param name="num_bootreps_" label="Number of bootstraps" value="1000" type="integer"/>
                 <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
                 <param name="specify_numparts_" label="Number of partitions in dataset" value="1" type="integer" optional="true"/>
             </when>
