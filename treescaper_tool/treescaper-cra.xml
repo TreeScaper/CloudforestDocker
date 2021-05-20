@@ -47,7 +47,6 @@
     <configfiles>
         <configfile name="cra_params"><![CDATA[#slurp
 # CRA Parameters
-metadata.statusEmail=true
 
 #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
 tool=$tool.id
