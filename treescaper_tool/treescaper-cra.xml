@@ -47,7 +47,6 @@
     <configfiles>
         <configfile name="cra_params"><![CDATA[#slurp
 # CRA Parameters
-metadata.statusEmail=true
 
 #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
 tool=$tool.id
@@ -99,7 +98,7 @@ treescaper.output=output.treefile
 #end if]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_collection" type="data_collection" optional="true" label="Collection of PHYLIP files."/>
+        <param name="input_collection" type="data_collection" optional="true" label="Collection of Sequence Alignments."/>
         <param name="status_file" type="data" format="txt" optional="true" label="Status file output by previous run of TreeScaper. Can be used to resume job submission if interrupted."/>
         <conditional name="tool">
             <param name="id" type="select" label="Tool" help="Select CIPRES REST API tool.">
