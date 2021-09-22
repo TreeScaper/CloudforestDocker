@@ -15,7 +15,7 @@
             #set $input_file = "input_file.txt"
             #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
             #set $output_suffix = "RAxML_bootstrap.result"
-            #else if $tool.id == 'IQTREE_XSEDE':
+            #else if $tool.id == 'IQTREE_XSEDE_1_01_01':
             #set $output_suffix = "output.treefile"
             #end if
 
@@ -56,7 +56,7 @@ vparam.printbrlength_=$tool.printbrlength_
 # Parameters used by TreeScaper
 treescaper.output=RAxML_bootstrap.result
 
-#else if $tool.id == 'IQTREE_XSEDE':
+#else if $tool.id == 'IQTREE_XSEDE_1_01_01':
 tool=$tool.id
 vparam.write_boottrees_=1
 vparam.specify_runtype_=2
@@ -102,7 +102,7 @@ treescaper.output=output.treefile
         <param name="status_file" type="data" format="txt" optional="true" label="Status file output by previous run of TreeScaper. Can be used to resume job submission if interrupted."/>
         <conditional name="tool">
             <param name="id" type="select" label="Tool" help="Select CIPRES REST API tool.">
-                <option value="IQTREE_XSEDE">IQ-TREE</option>
+                <option value="IQTREE_XSEDE_1_01_01">IQ-TREE</option>
                 <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
             </param>
             <when value="RAXMLHPC8_REST_XSEDE">
@@ -113,7 +113,7 @@ treescaper.output=output.treefile
                 <param name="printbrlength_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
                 <param name="bootstrap_value_" label="Number of bootstraps" value="100" type="integer" optional="true"/>
             </when>
-            <when value="IQTREE_XSEDE">
+            <when value="IQTREE_XSEDE_1_01_01">
 
                 <param name="sequence_type_" argument="-st" type="select" label="Sequence type">
                     <option value="DNA" selected="true">DNA</option>
