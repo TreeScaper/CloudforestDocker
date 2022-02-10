@@ -16,7 +16,7 @@
             #if $tool.id == 'RAXMLHPC8_REST_XSEDE':
             #set $output_suffix = "RAxML_bootstrap.result"
             #else if $tool.id == 'IQTREE_XSEDE_EXPANSE':
-            #set $output_suffix = "output.treefile"
+            #set $output_suffix = "infile.txt.treefile"
             #end if
 
             #for $input in $input_collection:
@@ -93,7 +93,7 @@ vparam.specify_aamodels_=$tool.specify_aamodels_
 #end if
 
 # Parameters used by TreeScaper
-treescaper.output=output.treefile
+treescaper.output=infile.txt.treefile
 #end if]]></configfile>
     </configfiles>
     <inputs>
