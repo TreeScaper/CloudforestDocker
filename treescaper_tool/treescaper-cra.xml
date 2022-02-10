@@ -63,7 +63,6 @@ vparam.specify_runtype_=2
 vparam.bootstrap_type_=$tool.bootstrap_type_
 vparam.num_bootreps_=$tool.num_bootreps_
 vparam.write_boottrees1_=$tool.write_boottrees1_
-vparam.specify_numparts_=$tool.specify_numparts_
 vparam.sequence_type_=$tool.sequence_type_
 #if $tool.specify_outgroup_:
 vparam.specify_outgroup_=$tool.specify_outgroup_
@@ -259,7 +258,6 @@ treescaper.output=output.treefile
                 </param>
                 <param name="num_bootreps_" label="Number of bootstraps" value="1000" type="integer"/>
                 <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
-                <param name="specify_numparts_" label="Number of partitions in dataset" value="1" type="integer" optional="true"/>
             </when>
         </conditional>
     </inputs>
