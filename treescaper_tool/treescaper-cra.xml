@@ -1,4 +1,4 @@
-<tool id="treescaper-cra" name="TreeScaper-CRA" version="@TREESCAPER2_VERSION@+galaxy0">
+<tool id="treescaper-cra" name="TreeScaper-CRA" version="@TREESCAPER2_VERSION@+galaxy1">
     <description>
         <![CDATA[
             (Warning: The current version of this wrapper does not fail if the underlying CLVTreeScaper2 program fails. This is done so that the job status file can be retrieved and output,
@@ -58,11 +58,13 @@ treescaper.output=RAxML_bootstrap.result
 
 #else if $tool.id == 'IQTREE_XSEDE_EXPANSE':
 tool=$tool.id
-vparam.write_boottrees_=1
 vparam.specify_runtype_=2
+#if $tool.bootstrap.run:
 vparam.bootstrap_type_=$tool.bootstrap_type_
 vparam.num_bootreps_=$tool.num_bootreps_
 vparam.write_boottrees1_=$tool.write_boottrees1_
+vparam.write_boottrees_=1
+#end if
 vparam.sequence_type_=$tool.sequence_type_
 #if $tool.specify_outgroup_:
 vparam.specify_outgroup_=$tool.specify_outgroup_
@@ -102,7 +104,6 @@ treescaper.output=infile.txt.treefile
         <conditional name="tool">
             <param name="id" type="select" label="Tool" help="Select CIPRES REST API tool.">
                 <option value="IQTREE_XSEDE_EXPANSE">IQ-TREE</option>
-                <option value="RAXMLHPC8_REST_XSEDE">RAxML</option>
             </param>
             <when value="RAXMLHPC8_REST_XSEDE">
                 <param name="choose_bootstrap_" type="select" label="Bootstrap type">
@@ -238,13 +239,6 @@ treescaper.output=infile.txt.treefile
                     <option value="+R">+R</option>
                     <option value="+I+R">+I+R</option>
                 </param>
-
-
-                <param name="bootstrap_type_" type="select" label="Bootstrap type">
-                    <option value="b">Non-parametric</option>
-                    <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
-                    <option value="bb" selected="true">Ultrafast</option>
-                </param>
                 <param argument="-merit" name="specify_merit_" type="select" label="Optimality Criterion" optional="true">
                     <option value="AIC">AIC</option>
                     <option value="AICc">AICc</option>
@@ -256,14 +250,25 @@ treescaper.output=infile.txt.treefile
                     <option value="chloroplast">chloroplast</option>
                     <option value="viral">viral</option>
                 </param>
-                <param name="num_bootreps_" label="Number of bootstraps" value="1000" type="integer"/>
-                <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
+
+                <conditional name="bootstrap">
+                    <param name="run" type="boolean" label="Perform bootstrapping analysis" checked="true" truevalue="1" falsevalue="0"/>
+                    <when value="1">
+                        <param name="bootstrap_type_" type="select" label="Bootstrap type">
+                            <option value="b">Non-parametric</option>
+                            <option value="bc">Non-parametric. Omit analysis on original alignment.</option>
+                            <option value="bb" selected="true">Ultrafast</option>
+                        </param>
+                        <param name="num_bootreps_" label="Number of bootstraps" value="1000" type="integer"/>
+                        <param name="write_boottrees1_" type="boolean" truevalue="1" falsevalue="0" checked="true" label="Print branch lengths" />
+                    </when>
+                </conditional>
             </when>
         </conditional>
     </inputs>
     <outputs>
-        <data name="composite.results" format="tabular" from_work_dir="composite.results" label="Bootstrap results (all results from input collection)."/>
-        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Bootstrap trees (all successful output trees from input collection)."/>
+        <data name="composite.results" format="tabular" from_work_dir="composite.results" label="Mapped Maximum Likelihood Trees"/>
+        <data name="composite.trees" format="cloudforest.trees" from_work_dir="composite.trees" label="Maximum Likelihood Trees"/>
         <data name="job_status" format="txt" from_work_dir="cra_output/job_status" label="Job status"/>
         <data name="parameters" format="txt" from_work_dir="params.txt" label="Parameters"/>
     </outputs>
