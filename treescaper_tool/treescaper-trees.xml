@@ -1,4 +1,4 @@
-<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@"+galaxy1>
+<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@+galaxy1">
     <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix, bipartition matrix or covariance matrix.</description>
     <macros>
         <import>treescaper_macros.xml</import>
