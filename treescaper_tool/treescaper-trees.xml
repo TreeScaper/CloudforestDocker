@@ -1,4 +1,4 @@
-<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@">
+<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@"+galaxy1>
     <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix, bipartition matrix or covariance matrix.</description>
     <macros>
         <import>treescaper_macros.xml</import>
@@ -115,7 +115,7 @@
         <data name="taxa_ids" format="cloudforest.text" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">
             <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
         </data>
-        <data name="bipartition_count" format="cloudforest.text" from_work_dir="Bipartition_Count" label="Bipartition Counts from ${on_string}">
+        <data name="bipartition_count" format="cloudforest.text" from_work_dir="Bipartition_Count_cova.out" label="Bipartition Counts from ${on_string}">
             <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
         </data>
         <data name="bipartition_matrix_dist" format="cloudforest.bipartition" from_work_dir="Bipartition_dist.out" label="Bipartition Matrix from ${on_string}">
