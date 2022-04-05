@@ -104,9 +104,7 @@ export TS_CRA_PASSWORD
 
 # Bring up service with docker-compose.
 docker-compose $COMPOSE_FILE_ARGS up -d $COMPOSE_BUILD_ARGS
-#echo sleeping
-#sleep 10
-#echo done sleeping
+
 while true; do
     docker logs cloudforest | grep /home/galaxy/logs/handler0.log
     if [[ $? -eq 0 ]]; then
