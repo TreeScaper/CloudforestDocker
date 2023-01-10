@@ -35,7 +35,7 @@
         ]]>
     </command>
     <inputs>        
-        <param name="input_file" argument="-f" type="data" format="cloudforest.affinity" label="Input file" />
+        <param name="input_file" argument="-f" type="data" format="cloudforest.affinity,cloudforest.covariance" label="Input file" />
         <param name="cd_model" argument="-cm" type="select" label="Model used to compute communities">
             <option value="CNM" selected="true">Configuration Null Model</option>
             <option value="CPM">Constant Potts Model</option>

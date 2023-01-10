@@ -20,7 +20,7 @@
         ]]>
     </command>
     <inputs>
-        <param name="input_file" argument="-f" type="data" format="cloudforest.distance" label="Input file" />
+        <param name="input_file" argument="-f" type="data" format="cloudforest.distance,cloudforest.covariance" label="Input file" />
         <param name="dimension" argument="-d" type="integer" value="3" label="Euclidean Dimension" />
         <param name="cost_function" argument="-c" type="select" label="Cost Function">
             <option value="CLASSIC_MDS">CLASSIC_MDS</option>
