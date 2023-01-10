@@ -17,8 +17,8 @@
     <inputs>
         <param name="input_file" argument="-f" type="data" format="cloudforest.distance" label="Input file" />
         <param name="affinity_type" argument="-am" type="select" label="Affinity type">
-            <option value="Rec">Rec</option>
-            <option value="Exp" selected="true">Exp</option>
+            <option value="Rec" selected="true">Rec</option>
+            <option value="Exp">Exp</option>
         </param>
     </inputs>
     <outputs>
