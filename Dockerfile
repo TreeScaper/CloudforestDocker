@@ -29,6 +29,20 @@ ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/clean_header.py $GALAXY_ROOT/tools/treescaper
+RUN mkdir -p $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-cra.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-affinity.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper-dimest.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper_macros.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/CLVTreeScaper $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/CLVTreeScaper2 $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/dimest_parameters.csv $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/nldr_parameters.csv $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/clean_header.py $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
 
 RUN mkdir $GALAXY_ROOT/tools/cloudforest_cat
 ADD ./cloudforest_cat_tool/cloudforest_cat.xml $GALAXY_ROOT/tools/cloudforest_cat
@@ -40,10 +54,11 @@ ADD ./iqtree_tool/iqtree $GALAXY_ROOT/tools/iqtree
 # Add for CloudForest datatype
 ADD ./custom_src/datatypes_conf.xml $GALAXY_ROOT/config/
 ADD ./custom_src/cloudforest.py $GALAXY_ROOT/lib/galaxy/datatypes/
+ADD ./custom_src/export_user_files.py /usr/local/bin/export_user_files.py
 
 # Add visualization code to galaxy
-ADD cloudforest.tar.gz $GALAXY_ROOT/static/plugins/visualizations/
-ADD cloudforest.tar.gz $GALAXY_ROOT/config/plugins/visualizations/
+RUN mkdir $GALAXY_ROOT/treescaper_artifacts/viz
+ADD cloudforest.tar.gz $GALAXY_ROOT/treescaper_artifacts/viz
 
 USER root
 

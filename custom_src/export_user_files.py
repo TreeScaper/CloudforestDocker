@@ -4,6 +4,7 @@ import sys
 import os
 import shutil
 import subprocess
+from distutils.dir_util import copy_tree
 
 if len( sys.argv ) == 2:
     PG_DATA_DIR_DEFAULT = sys.argv[1]
@@ -36,7 +37,6 @@ def change_path( src ):
                     else:
                         os.unlink( stripped_src )
                     os.symlink( dest, src.rstrip('/') )
-
 
 def copy_samples(src, dest):
     if not os.path.realpath(src) == os.path.realpath(dest):
@@ -84,6 +84,30 @@ if __name__ == "__main__":
     config_src = os.path.join(galaxy_root_dir, 'config')
     config_dest = os.path.join('/export/', galaxy_root_dir, 'config')
     copy_samples(config_src, config_dest)
+
+    # Copy CloudForest visualizations
+    existing_viz_bundles = glob.glob(os.path.join('/export/', galaxy_root_dir, 'config/plugins/visualizations/cloudforest/static/bundle-*'))
+    for f in existing_viz_bundles:
+        os.remove(f)
+
+    config_src = os.path.join(galaxy_root_dir, 'treescaper_artifacts/viz')
+    config_dest = os.path.join('/export/', galaxy_root_dir, 'config/plugins/visualizations')
+    copy_tree(config_src, config_dest);
+    subprocess.call('chown -R galaxy:galaxy %s' % config_dest, shell=True)
+
+    config_dest = os.path.join(galaxy_root_dir, 'config/plugins/visualizations')
+    copy_tree(config_src, config_dest);
+    subprocess.call('chown -R galaxy:galaxy %s' % config_dest, shell=True)
+
+    # Copy CloudForest tools
+    config_src = os.path.join(galaxy_root_dir, 'treescaper_artifacts/tools/treescaper')
+    config_dest = os.path.join('/export/', galaxy_root_dir, 'tools/')
+    copy_tree(config_src, config_dest);
+    subprocess.call('chown -R galaxy:galaxy %s' % config_dest, shell=True)
+
+    config_dest = os.path.join(galaxy_root_dir, 'tools/', 'treescaper')
+    copy_tree(config_src, config_dest);
+    subprocess.call('chown -R galaxy:galaxy %s' % config_dest, shell=True)
 
     # Copy all sample files to tool-data dir
     # TODO find a way to update shared/ without breaking user customizations
