@@ -32,7 +32,10 @@ docker cp treescaper_tool/treescaper-cra.xml       cloudforest:/export/galaxy-ce
 docker cp treescaper_tool/treescaper-dimest.xml    cloudforest:/export/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper-nldr.xml      cloudforest:/export/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper-trees.xml     cloudforest:/export/galaxy-central/tools/treescaper
+docker cp treescaper_tool/treescaper2-trees.xml     cloudforest:/export/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper_macros.xml    cloudforest:/export/galaxy-central/tools/treescaper
+
+docker cp tool_conf.xml    cloudforest:/export/galaxy-central/config
 
 docker cp treescaper_tool/CLVTreeScaper            cloudforest:/galaxy-central/tools/treescaper
 docker cp treescaper_tool/CLVTreeScaper2           cloudforest:/galaxy-central/tools/treescaper
@@ -46,7 +49,10 @@ docker cp treescaper_tool/treescaper-cra.xml       cloudforest:/galaxy-central/t
 docker cp treescaper_tool/treescaper-dimest.xml    cloudforest:/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper-nldr.xml      cloudforest:/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper-trees.xml     cloudforest:/galaxy-central/tools/treescaper
+docker cp treescaper_tool/treescaper2-trees.xml     cloudforest:/galaxy-central/tools/treescaper
 docker cp treescaper_tool/treescaper_macros.xml    cloudforest:/galaxy-central/tools/treescaper
+
+docker cp tool_conf.xml    cloudforest:/galaxy-central/config
 
 if [[ $RESTART_GALAXY == true ]]; then
     echo "$0 Restarting Galaxy."

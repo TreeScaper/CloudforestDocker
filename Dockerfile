@@ -17,6 +17,7 @@ RUN startup_lite && \
 USER galaxy
 RUN mkdir $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/tools/treescaper
+ADD ./treescaper_tool/treescaper2-trees.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-cra.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/tools/treescaper
@@ -31,6 +32,7 @@ ADD ./treescaper_tool/subsample.py $GALAXY_ROOT/tools/treescaper
 ADD ./treescaper_tool/clean_header.py $GALAXY_ROOT/tools/treescaper
 RUN mkdir -p $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
 ADD ./treescaper_tool/treescaper-trees.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
+ADD ./treescaper_tool/treescaper2-trees.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
 ADD ./treescaper_tool/treescaper-cra.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
 ADD ./treescaper_tool/treescaper-nldr.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper
 ADD ./treescaper_tool/treescaper-community.xml $GALAXY_ROOT/treescaper_artifacts/tools/treescaper

@@ -1,0 +1,109 @@
+<tool id="treescaper2-trees" name="TreeScaper2-Trees" version="galaxy0">
+    <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix, bipartition matrix or covariance matrix.</description>
+    <macros>
+        <import>treescaper_macros.xml</import>
+        <xml name="leaf_sets">
+            <param name="same_leaf" argument="-same-leaf" type="select" label="Leaf Sets">
+                <option value="1" selected="true">Identical</option>
+                <option value="0">Non-identical</option>
+            </param>
+        </xml>
+    </macros>
+    <command detect_errors="exit_code">
+        <![CDATA[
+            #set $linked_name = "dummy_link.dat"
+
+            #if $subsample_selector == "random_subsample" 
+                python $__tool_directory__/subsample.py $input_file $sample_size &&
+                ln -s subsampled.file  "${linked_name}" &&
+            #else if $subsample_selector == 'random_interval_subsample'
+                python $__tool_directory__/subsample.py $input_file $sample_size interval &&
+                ln -s subsampled.file  "${linked_name}" &&
+            #else
+                ln -s "${input_file}"  "${linked_name}" &&
+            #end if
+
+            $__tool_directory__/CLVTreeScaper2
+                -trees
+                -f  $linked_name
+                -output $tree_output.output_type
+                -w $weighted_tree
+                -r $rooted_tree
+                -post dist
+                -same-leaf $same_leaf
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_file" argument="-f" type="data" format="cloudforest.trees" label="Input file" />
+        
+        <conditional name="tree_output">
+            <param name="output_type" argument="-output" type="select" label="Output Type">
+                <option value="Distance" selected="true">Distance</option>
+            </param>
+            <when value="Distance">
+                <param name="distance_metric" type="select" label="Distance metric">
+                    <option value="RF" selected="true">Robinson-Foulds distance</option>
+                </param>
+            </when>
+        </conditional>
+        <expand macro="leaf_sets"/>
+        <param name="weighted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
+            <option value="0" selected="true">Unweighted</option>
+            <option value="1">Weighted</option>
+        </param>
+        <param name="rooted_tree" argument="-r" type="select" label="Rooted/Unrooted Tree">
+            <option value="0" selected="true">Unrooted</option>
+            <option value="1">Rooted</option>
+        </param>
+        <param name="subsample_selector" type="select" label="Subsample Tree Input">
+            <option value="no_subsample" selected="true">No subsampling</option>
+            <option value="random_subsample">Random subsampling</option>
+            <option value="random_interval_subsample">Regular interval random subsampling</option>
+            <help>
+                <![CDATA[
+                You can subsample the input tree set in two ways: randomly selecting a new sample from the 
+                original treeset, or randomly selecting a new sample across regular intervals of the original tree set.
+                This guarantees coverage across the set from tree 1 to tree n. 
+                ]]>
+            </help>
+        </param>
+        <param name="sample_size" type="integer" value="1" label="Size" />
+
+    </inputs>
+    <outputs>
+        <data name="taxa_ids" format="cloudforest.text" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">
+            <filter>tree_output["output_type"] in ["Bipartition", "Distance", "Cova"]</filter>
+        </data>
+        <data name="bipartition_count" format="cloudforest.text" from_work_dir="Bipartition_Count_cova.out" label="Bipartition Counts from ${on_string}">
+            <filter>tree_output["output_type"] in ["Bipartition", "Distance", "Cova"]</filter>
+        </data>
+        <data name="bipartition_matrix_dist" format="cloudforest.bipartition" from_work_dir="Bipartition_dist.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Distance"</filter>
+        </data>
+        <data name="bipartition_matrix_cova" format="cloudforest.bipartition" from_work_dir="Bipartition_cova.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Cova"</filter>
+        </data>
+        <data name="bipartition_matrix_bipartition" format="cloudforest.bipartition" from_work_dir="Bipartition_bipartition.out" label="Bipartition Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Bipartition"</filter>
+        </data>
+        <data name="covariance_matrix" format="cloudforest.covariance" from_work_dir="*Covariance_cova.out" label="Covariance Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Cova"</filter>
+        </data>
+        <data name="distance" format="cloudforest.distance" from_work_dir="Distance_dist.out" label="Distance Matrix from ${on_string}">
+            <filter>tree_output["output_type"] == "Distance"</filter>
+        </data>
+        <data name="cons_tree" format="nex" from_work_dir="Consensus_consensus.out" label="Consensus Tree from ${on_string}">
+            <filter>tree_output["output_type"] == "Consensus"</filter>
+        </data>
+    </outputs>
+    <help>
+        <![CDATA[
+TreeScaper2
+==========
+    ]]>
+    </help>
+    <citations>
+        <citation type=" doi">10.1093/molbev/msw196</citation>
+    </citations>
+
+</tool>
