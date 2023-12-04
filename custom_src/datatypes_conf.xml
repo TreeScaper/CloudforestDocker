@@ -392,12 +392,15 @@
     <datatype extension="cloudforest.trees" type="galaxy.datatypes.cloudforest:CloudForestTrees"  display_in_upload="true"/>
     <datatype extension="cloudforest.coordinates" type="galaxy.datatypes.cloudforest:CloudForestCoordinates" display_in_upload="true" />
     <datatype extension="cloudforest.covariance" type="galaxy.datatypes.cloudforest:CloudForestCovariance" display_in_upload="true" />
-    <datatype extension="cloudforest.cd" type="galaxy.datatypes.cloudforest:CloudForestCD"  display_in_upload="true" />
+    <datatype extension="cloudforest.cd_results" type="galaxy.datatypes.cloudforest:CloudForestCDResults"  display_in_upload="true" />
+    <datatype extension="cloudforest.cd_plateaus" type="galaxy.datatypes.cloudforest:CloudForestCDPlateaus"  display_in_upload="true" />
     
     <datatype extension="cloudforest.text" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
     <datatype extension="cloudforest.distance" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
     <datatype extension="cloudforest.affinity" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
     <datatype extension="cloudforest.bipartition" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
+    <datatype extension="cloudforest.taxids" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
+    <datatype extension="cloudforest.counts" type="galaxy.datatypes.cloudforest:CloudForest"  subclass="true" />
     
     <datatype extension="iqtree" type="galaxy.datatypes.text:IQTree" />
     <datatype extension="mldist" type="galaxy.datatypes.mothur:SquareDistanceMatrix" />

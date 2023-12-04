@@ -103,8 +103,8 @@
         </param>  
     </inputs>
     <outputs>
-        <data name="cd_plateaus" format="cloudforest.cd" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
-        <data name="community_results" format="cloudforest.cd" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
+        <data name="cd_plateaus" format="cloudforest.cd_plateaus" from_work_dir="CD_Plateaus_cd_detect.out" label="CD Plateaus from ${on_string}" />
+        <data name="community_results" format="cloudforest.cd_results" from_work_dir="Community_cd_detect.out" label="CD Results from ${on_string}" />
     </outputs>
     <help>
         <![CDATA[

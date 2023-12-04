@@ -15,6 +15,10 @@ if [[ $NO_UNPACK != true ]]; then
 fi
 
 echo "$0 Copy files into container."
+
+docker cp custom_src/datatypes_conf.xml cloudforest:/galaxy-central/config
+docker cp custom_src/datatypes_conf.xml cloudforest:/export/galaxy-central/config
+
 docker cp cloudforest/static/bundle*.js            cloudforest:/galaxy-central/static/plugins/visualizations/cloudforest/static
 docker cp cloudforest/templates/cloudforest.mako   cloudforest:/galaxy-central/config/plugins/visualizations/cloudforest/templates/
 docker cp cloudforest/static/bundle*.js            cloudforest:/galaxy-central/config/plugins/visualizations/cloudforest/static
