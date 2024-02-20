@@ -64,11 +64,12 @@ ADD cloudforest.tar.gz $GALAXY_ROOT/treescaper_artifacts/viz
 
 USER root
 
-# This is needed due to an outdated GPG key used for yarn
-RUN apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
-
-# Install dependency for CLVTreeScaper2
-RUN apt-get update && apt-get install -y libpugixml1v5
+# Temporarily remove this as it's currently not building.
+# # This is needed due to an outdated GPG key used for yarn
+# RUN apt-key adv --refresh-keys --keyserver keyserver.ubuntu.com
+#
+# # Install dependency for CLVTreeScaper2
+# RUN apt-get update && apt-get install -y libpugixml1v5
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]

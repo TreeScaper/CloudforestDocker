@@ -1,7 +1,13 @@
-<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TOOL_VERSION@+galaxy1">
+<tool id="treescaper-trees" name="TreeScaper-Trees" version="@TREESCAPER2_VERSION@+galaxy0">
     <description>Phylogenomic / Compute a majority rule/strict consensus tree, distance matrix, bipartition matrix or covariance matrix.</description>
     <macros>
         <import>treescaper_macros.xml</import>
+        <xml name="leaf_sets">
+            <param name="same_leaf" argument="-same-leaf" type="select" label="Leaf Sets">
+                <option value="1" selected="true">Identical</option>
+                <option value="0">Non-identical</option>
+            </param>
+        </xml>
     </macros>
     <command detect_errors="exit_code">
         <![CDATA[
@@ -17,32 +23,26 @@
                 ln -s "${input_file}"  "${linked_name}" &&
             #end if
 
-            $__tool_directory__/CLVTreeScaper
+            $__tool_directory__/CLVTreeScaper2
                 -trees
                 -f  $linked_name
-                -o $tree_output.output_type
-                -w $weigted_tree
+                -output $tree_output.output_type
+                -w $weighted_tree
                 -r $rooted_tree
-                -s $seed
-                -c $scalar
-                #if $tree_output.output_type == "Dist"
-                    -dm $tree_output.dm
-                    -dfm $tree_output.dfm
+                -same-leaf $same_leaf
+                #if $tree_output.output_type == "Distance"
                     -post dist
                 #end if
-                #if $tree_output.output_type == "Cova"
+                #if $tree_output.output_type == "Covariance"
                     -post cova
                 #end if
                 #if $tree_output.output_type == "Consensus"
                     #if $tree_output.if
                         -if $tree_output.if
                     #end if
-                    -ct $tree_output.ct
+                    -consensus-type $tree_output.ct
                     -cfm $tree_output.cfm
                     -post consensus
-                #end if
-                #if $tree_output.output_type == "Bipartition"
-                    -post bipartition
                 #end if
         ]]>
     </command>
@@ -50,16 +50,15 @@
         <param name="input_file" argument="-f" type="data" format="cloudforest.trees" label="Input file" />
         
         <conditional name="tree_output">
-            <param name="output_type" argument="-o" type="select" label="Output Type">
-                <option value="Dist" selected="true">Dist</option>
+            <param name="output_type" argument="-output" type="select" label="Output Type">
+                <option value="Distance" selected="true">Distance</option>
                 <option value="Consensus">Consensus</option>
                 <option value="Cova">Covariance</option>
-                <option value="Bipartition">Bipartition only</option>
             </param>
             <when value="Consensus">
                 <param argument="-if" type="data" format="txt" label="List file" optional="true" />
-                <param argument="-ct" type="select" label="Consensus tree type">
-                    <option value="Majority" selected="true">Majority consensus tree</option>
+                <param argument="-consensus-type" type="select" label="Consensus tree type">
+                    <option value="Major" selected="true">Majority consensus tree</option>
                     <option value="Strict">Strict consensus tree</option>
                 </param>
                 <param argument="-cfm" type="select" label="Consensus tree format">
@@ -67,26 +66,9 @@
                     <option value="Nexus">Nexus</option>
                 </param>
             </when>
-            <when value="Dist">
-                <param argument="-dm" type="select" label="Distance metric">
-                    <option value="URF" selected="true">Unweighted Robinson-Foulds distance</option>
-                    <option value="RF">Weighted Robinson-Foulds distance</option>
-                    <option value="Mat">Matching distance</option>
-                    <option value="SPR">Subtree-Prune-Regraft</option>
-                </param>
-                <param argument="-dfm" type="select" label="Distance matrix format">
-                    <option value="matrix" selected="true">Matrix</option>
-                    <option value="list">List</option>
-                    <help>
-                        <![CDATA[
-                            Format of output symmetric matrix. "Matrix" outputs a matrix in dense lower triangular form,
-                            whereas "List" outputs a list of indices and entries.
-                        ]]>
-                    </help>
-                </param>
-            </when>
         </conditional>
-        <param name="weigted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
+        <expand macro="leaf_sets"/>
+        <param name="weighted_tree" argument="-w" type="select" label="Weighted/Unweighted Tree">
             <option value="0" selected="true">Unweighted</option>
             <option value="1">Weighted</option>
         </param>
@@ -107,19 +89,17 @@
             </help>
         </param>
         <param name="sample_size" type="integer" value="1" label="Size" />
-        <param name="seed" argument="-s" type="integer" value="1" label="Random seed for hash function."/>
-        <param name="scalar" argument="-c" type="integer" value="1000" label="Scalar of prime number p > cnl that is used as the range of the unique label of bitstring hv2."/>
         
     </inputs>
     <outputs>
         <data name="taxa_ids" format="cloudforest.taxids" from_work_dir="Taxon*" label="Taxa IDs from ${on_string}">
-            <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
+            <filter>tree_output["output_type"] in ["Bipartition", "Distance", "Cova"]</filter>
         </data>
-        <data name="bipartition_count" format="cloudforest.counts" from_work_dir="Bipartition_Count_cova.out" label="Bipartition Counts from ${on_string}">
-            <filter>tree_output["output_type"] in ["Bipartition", "Dist", "Cova"]</filter>
+        <data name="bipartition_count" format="cloudforest.counts" from_work_dir="Bipartition_Count_*.out" label="Bipartition Counts from ${on_string}">
+            <filter>tree_output["output_type"] in ["Bipartition", "Distance", "Cova"]</filter>
         </data>
         <data name="bipartition_matrix_dist" format="cloudforest.bipartition" from_work_dir="Bipartition_dist.out" label="Bipartition Matrix from ${on_string}">
-            <filter>tree_output["output_type"] == "Dist"</filter>
+            <filter>tree_output["output_type"] == "Distance"</filter>
         </data>
         <data name="bipartition_matrix_cova" format="cloudforest.bipartition" from_work_dir="Bipartition_cova.out" label="Bipartition Matrix from ${on_string}">
             <filter>tree_output["output_type"] == "Cova"</filter>
@@ -131,7 +111,7 @@
             <filter>tree_output["output_type"] == "Cova"</filter>
         </data>
         <data name="distance" format="cloudforest.distance" from_work_dir="Distance_dist.out" label="Distance Matrix from ${on_string}">
-            <filter>tree_output["output_type"] == "Dist"</filter>
+            <filter>tree_output["output_type"] == "Distance"</filter>
         </data>
         <data name="cons_tree" format="nex" from_work_dir="Consensus_consensus.out" label="Consensus Tree from ${on_string}">
             <filter>tree_output["output_type"] == "Consensus"</filter>

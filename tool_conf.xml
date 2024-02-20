@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolbox monitor="true">
   <section id="cloudforest" name="CloudForest">
-    <tool file="treescaper/treescaper-cra.xml" />
+    <!-- The CRA tool may be outdated and needs revisiting -->
+    <!-- <tool file="treescaper/treescaper-cra.xml" /> -->
     <tool file="treescaper/treescaper-trees.xml" />
-    <tool file="treescaper/treescaper2-trees.xml" />
     <tool file="treescaper/treescaper-nldr.xml" />
     <tool file="treescaper/treescaper-community.xml" />
     <tool file="treescaper/treescaper-affinity.xml" />
